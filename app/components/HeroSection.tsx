@@ -540,7 +540,7 @@ export default function HeroSection() {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <section className="relative w-full h-screen overflow-hidden bg-gradient-to-b from-[#0a0a12] via-[#0f0f20] to-[#0a0a12] flex flex-col items-center justify-end">
+    <section className="relative w-full min-h-screen max-h-screen overflow-hidden bg-gradient-to-b from-[#0a0a12] via-[#0f0f20] to-[#0a0a12] flex flex-col items-center justify-center">
       {/* Noise overlay */}
       <div className="noise-overlay" />
 
@@ -562,7 +562,7 @@ export default function HeroSection() {
       <CableBundle />
 
       {/* FAINT PORTAL BACKGROUND - Centered */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 w-[50vw] max-w-[600px] aspect-square">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 w-[50vw] max-w-[500px] max-h-[500px] aspect-square">
         <motion.div
           initial={{ opacity: 0, scale: 0.9, rotate: 0 }}
           animate={{ 
@@ -580,7 +580,7 @@ export default function HeroSection() {
           <img
             src="/Images/image.png"
             alt="Cosmic Energy Signature"
-            className="w-full h-full object-contain opacity-30"
+            className="w-full h-full object-contain opacity-20"
             style={{
               maskImage: 'radial-gradient(circle, white 0%, white 40%, transparent 70%)',
               WebkitMaskImage: 'radial-gradient(circle, white 0%, white 40%, transparent 70%)'
@@ -600,10 +600,10 @@ export default function HeroSection() {
       </div>
 
       {/* LAB SCENE WRAPPER - Centered and contained */}
-      <div className="absolute bottom-[12vh] left-0 w-full h-[65vh] flex flex-col justify-end items-center z-10">
-        <div className="relative w-full h-full max-w-7xl max-w-[95vw] mx-auto">
+      <div className="absolute bottom-[8vh] left-0 w-full h-[55vh] flex flex-col justify-end items-center z-10">
+        <div className="relative w-full h-full max-w-7xl mx-auto px-4">
           {/* Scale wrapper for entire lab assembly */}
-          <div className="absolute bottom-0 left-0 right-0 h-full flex items-end justify-center" style={{ transform: 'scale(0.9)', transformOrigin: 'bottom center' }}>
+          <div className="absolute bottom-0 left-0 right-0 h-full flex items-end justify-center" style={{ transform: 'scale(0.75)', transformOrigin: 'bottom center' }}>
             <div className="relative w-full h-full flex items-end justify-center">
               {/* Workstation area - Left side */}
               <motion.div
@@ -628,13 +628,43 @@ export default function HeroSection() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 2.5, duration: 0.8 }}
-        className="absolute top-[55%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-full max-w-2xl px-4"
+        className="absolute top-[18vh] left-0 right-0 z-20 flex justify-center items-center px-4"
       >
-        <div className="backdrop-blur-sm bg-black/30 rounded-full px-6 py-2 border border-white/10">
-          <p className="text-center text-sm md:text-base text-cyan-100 font-sans leading-relaxed">
-            Welcome to my digital laboratory. I'm an AI researcher & developer exploring the intersection of machine learning, software engineering, and creative problem-solving.
+        <motion.div 
+          animate={{ 
+            boxShadow: [
+              '0 0 40px rgba(139, 92, 246, 0.3), 0 0 80px rgba(59, 130, 246, 0.2)',
+              '0 0 60px rgba(139, 92, 246, 0.4), 0 0 100px rgba(59, 130, 246, 0.3)',
+              '0 0 40px rgba(139, 92, 246, 0.3), 0 0 80px rgba(59, 130, 246, 0.2)',
+            ]
+          }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          className="backdrop-blur-md bg-gradient-to-br from-purple-950/30 via-black/50 to-blue-950/30 rounded-3xl px-8 sm:px-10 md:px-12 py-5 sm:py-6 border border-purple-500/20 shadow-2xl max-w-3xl w-full relative overflow-hidden"
+        >
+          {/* Animated gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/5 via-cyan-500/5 to-blue-500/5 opacity-50" />
+          
+          {/* Accent corners */}
+          <div className="absolute top-0 left-0 w-16 h-16 border-t-2 border-l-2 border-purple-400/40 rounded-tl-3xl" />
+          <div className="absolute bottom-0 right-0 w-16 h-16 border-b-2 border-r-2 border-cyan-400/40 rounded-br-3xl" />
+          
+          <p className="text-center text-sm sm:text-base md:text-lg font-light leading-relaxed relative z-10">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-200 via-blue-100 to-purple-200 font-medium">
+              Welcome to my digital laboratory.
+            </span>
+            {' '}
+            <span className="text-gray-300">
+              I'm an{' '}
+              <span className="text-purple-300 font-semibold">AI researcher</span>
+              {' '}&{' '}
+              <span className="text-cyan-300 font-semibold">developer</span>
+              {' '}exploring the intersection of{' '}
+              <span className="text-blue-300">machine learning</span>,{' '}
+              <span className="text-purple-300">software engineering</span>, and{' '}
+              <span className="text-cyan-300">creative problem-solving</span>.
+            </span>
           </p>
-        </div>
+        </motion.div>
       </motion.div>
     </section>
   );
