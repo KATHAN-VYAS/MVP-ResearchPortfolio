@@ -630,41 +630,116 @@ export default function HeroSection() {
         transition={{ delay: 2.5, duration: 0.8 }}
         className="absolute top-[18vh] left-0 right-0 z-20 flex justify-center items-center px-4"
       >
-        <motion.div 
-          animate={{ 
-            boxShadow: [
-              '0 0 40px rgba(139, 92, 246, 0.3), 0 0 80px rgba(59, 130, 246, 0.2)',
-              '0 0 60px rgba(139, 92, 246, 0.4), 0 0 100px rgba(59, 130, 246, 0.3)',
-              '0 0 40px rgba(139, 92, 246, 0.3), 0 0 80px rgba(59, 130, 246, 0.2)',
-            ]
-          }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-          className="backdrop-blur-md bg-gradient-to-br from-purple-950/30 via-black/50 to-blue-950/30 rounded-3xl px-8 sm:px-10 md:px-12 py-5 sm:py-6 border border-purple-500/20 shadow-2xl max-w-3xl w-full relative overflow-hidden"
-        >
-          {/* Animated gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/5 via-cyan-500/5 to-blue-500/5 opacity-50" />
+        <div className="max-w-4xl w-full relative">
+          {/* Animated glow effects behind text */}
+          <motion.div
+            animate={{ 
+              opacity: [0.3, 0.6, 0.3],
+              scale: [1, 1.1, 1],
+            }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute inset-0 bg-gradient-to-r from-purple-600/20 via-cyan-600/20 to-blue-600/20 blur-3xl"
+          />
           
-          {/* Accent corners */}
-          <div className="absolute top-0 left-0 w-16 h-16 border-t-2 border-l-2 border-purple-400/40 rounded-tl-3xl" />
-          <div className="absolute bottom-0 right-0 w-16 h-16 border-b-2 border-r-2 border-cyan-400/40 rounded-br-3xl" />
+          {/* Scanline effect */}
+          <motion.div
+            animate={{ y: ['-100%', '200%'] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+            className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-400/10 to-transparent h-20 pointer-events-none"
+          />
           
-          <p className="text-center text-sm sm:text-base md:text-lg font-light leading-relaxed relative z-10">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-200 via-blue-100 to-purple-200 font-medium">
-              Welcome to my digital laboratory.
-            </span>
+          <motion.p 
+            className="text-center text-base sm:text-lg md:text-xl lg:text-2xl font-light leading-relaxed relative z-10 px-4"
+            style={{ textShadow: '0 0 20px rgba(139, 92, 246, 0.5), 0 0 40px rgba(59, 130, 246, 0.3)' }}
+          >
+            <motion.span 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 2.7, duration: 0.8 }}
+              className="inline-block"
+            >
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-blue-200 to-purple-300 font-semibold drop-shadow-[0_0_15px_rgba(139,92,246,0.5)]">
+                Welcome to my digital laboratory.
+              </span>
+            </motion.span>
             {' '}
-            <span className="text-gray-300">
+            <motion.span 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 2.9, duration: 0.8 }}
+              className="inline-block text-gray-200"
+            >
               I'm an{' '}
-              <span className="text-purple-300 font-semibold">AI researcher</span>
-              {' '}&{' '}
-              <span className="text-cyan-300 font-semibold">developer</span>
-              {' '}exploring the intersection of{' '}
-              <span className="text-blue-300">machine learning</span>,{' '}
-              <span className="text-purple-300">software engineering</span>, and{' '}
-              <span className="text-cyan-300">creative problem-solving</span>.
-            </span>
-          </p>
-        </motion.div>
+            </motion.span>
+            <motion.span 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 3.1, duration: 0.6 }}
+              whileHover={{ scale: 1.05, textShadow: '0 0 30px rgba(168, 85, 247, 0.8)' }}
+              className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-purple-300 font-bold drop-shadow-[0_0_10px_rgba(168,85,247,0.6)]"
+            >
+              Artificial Intelligence
+            </motion.span>
+            {' '}
+            <motion.span 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 3.3, duration: 0.6 }}
+              className="inline-block text-gray-200 font-semibold"
+            >
+              &
+            </motion.span>
+            {' '}
+            <motion.span 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 3.5, duration: 0.6 }}
+              whileHover={{ scale: 1.05, textShadow: '0 0 30px rgba(34, 211, 238, 0.8)' }}
+              className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-cyan-300 font-bold drop-shadow-[0_0_10px_rgba(34,211,238,0.6)]"
+            >
+              Cybersecurity
+            </motion.span>
+            {' '}
+            <motion.span 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 3.7, duration: 0.6 }}
+              className="inline-block text-gray-200"
+            >
+              Researcher exploring the intersection of{' '}
+            </motion.span>
+            <motion.span 
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 3.9, duration: 0.6 }}
+              whileHover={{ scale: 1.05, textShadow: '0 0 30px rgba(59, 130, 246, 0.8)' }}
+              className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-300 font-semibold drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]"
+            >
+              Quantum Machine Learning
+            </motion.span>
+            ,{' '}
+            <motion.span 
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 4.1, duration: 0.6 }}
+              whileHover={{ scale: 1.05, textShadow: '0 0 30px rgba(168, 85, 247, 0.8)' }}
+              className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-purple-300 font-semibold drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]"
+            >
+              Large Language Models
+            </motion.span>
+            , and{' '}
+            <motion.span 
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 4.3, duration: 0.6 }}
+              whileHover={{ scale: 1.05, textShadow: '0 0 30px rgba(34, 211, 238, 0.8)' }}
+              className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-cyan-300 font-semibold drop-shadow-[0_0_8px_rgba(34,211,238,0.5)]"
+            >
+              Cybersecurity
+            </motion.span>
+            .
+          </motion.p>
+        </div>
       </motion.div>
     </section>
   );
