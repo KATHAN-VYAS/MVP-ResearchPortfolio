@@ -2,7 +2,7 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef, useState, useEffect } from 'react';
-import { Linkedin, Github, Instagram, Mail, MessageSquare, Shield, Zap, Building2, GraduationCap, Target, Microscope, Activity } from 'lucide-react';
+import { Linkedin, Github, Instagram, Mail, Shield, Zap, Building2, GraduationCap, Target, Microscope, Activity } from 'lucide-react';
 import Image from 'next/image';
 import { useThreatMode } from '../contexts/ThreatContext';
 import Navbar from '../components/Navbar';
