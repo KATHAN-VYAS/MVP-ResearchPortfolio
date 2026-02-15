@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 
 // LED Component for server wall
 function LED({ delay }: { delay: number }) {
@@ -577,15 +578,18 @@ export default function HeroSection() {
           }}
           className="w-full h-full"
         >
-          <img
-            src="/Images/image.png"
-            alt="Cosmic Energy Signature"
-            className="w-full h-full object-contain opacity-20"
-            style={{
-              maskImage: 'radial-gradient(circle, white 0%, white 40%, transparent 70%)',
-              WebkitMaskImage: 'radial-gradient(circle, white 0%, white 40%, transparent 70%)'
-            }}
-          />
+          <div className="relative w-full h-full">
+            <Image
+              src="/Images/image.png"
+              alt="Cosmic Energy Signature"
+              fill
+              className="object-contain opacity-20"
+              style={{
+                maskImage: 'radial-gradient(circle, white 0%, white 40%, transparent 70%)',
+                WebkitMaskImage: 'radial-gradient(circle, white 0%, white 40%, transparent 70%)'
+              }}
+            />
+          </div>
           
           {/* Subtle pulsing glow */}
           <motion.div

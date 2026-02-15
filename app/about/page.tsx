@@ -224,7 +224,7 @@ export default function AboutPage() {
                 {/* THE AXIOM */}
                 <div className="space-y-2">
                   <p className="font-mono text-xs uppercase text-cyan-400 tracking-wider">
-                    // THE AXIOM
+                    {'// THE AXIOM'}
                   </p>
                   <div className="glass-effect p-6 rounded-xl border border-cyan-500/30 bg-black/20">
                     <p className="text-sm md:text-base leading-relaxed text-cyan-300/90 italic">
@@ -236,7 +236,7 @@ export default function AboutPage() {
                 {/* THE PROTOCOL */}
                 <div className="space-y-2">
                   <p className="font-mono text-xs uppercase text-purple-400 tracking-wider">
-                    // THE PROTOCOL
+                    {'// THE PROTOCOL'}
                   </p>
                   <div className="glass-effect p-5 rounded-xl border border-purple-500/20 bg-black/10">
                     <p className="text-gray-300 leading-relaxed">
@@ -250,7 +250,7 @@ export default function AboutPage() {
                 {/* PRIME DIRECTIVE */}
                 <div className="space-y-2">
                   <p className="font-mono text-xs uppercase tracking-wider">
-                    // MISSION
+                    {'// MISSION'}
                   </p>
                   <div className="glass-effect p-5 rounded-xl border border-cyan-500/20 bg-black/10">
                     <p className="text-gray-300 leading-relaxed">
