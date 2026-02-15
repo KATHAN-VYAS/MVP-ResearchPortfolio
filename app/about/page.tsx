@@ -586,8 +586,8 @@ export default function AboutPage() {
             {/* Horizontal Scroll Container */}
             <div className="overflow-x-auto pb-8 scrollbar-thin scrollbar-thumb-cyan-500/50 scrollbar-track-transparent">
               <div className="flex gap-8 min-w-max px-4 md:px-0 md:justify-center">
+
                 {experiences.map((exp, index) => {
-                  const IconComponent = exp.icon;
                   const isHovered = hoveredCard === index;
 
                   return (
