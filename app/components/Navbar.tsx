@@ -8,9 +8,9 @@ import { useThreatMode } from '../contexts/ThreatContext';
 
 const navItems = [
   { label: 'About me', href: '/about' },
-  { label: 'Research', href: '/#research' },
-  { label: 'Other Projects', href: '/#projects' },
-  { label: 'Connect', href: '/#connect' },
+  { label: 'Research', href: '/research' },
+  { label: 'Other Projects', href: '/projects' },
+  { label: 'Connect', href: '/connect' },
 ];
 
 export default function Navbar() {

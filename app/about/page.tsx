@@ -48,11 +48,18 @@ export default function AboutPage() {
 
   // Preloader effect
   useEffect(() => {
+    // Hide scrollbar during loading to prevent flash
+    document.body.style.overflow = 'hidden';
+
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 2000);
+      document.body.style.overflow = '';
+    }, 3000);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      document.body.style.overflow = '';
+    };
   }, []);
 
   const experiences = [
@@ -135,7 +142,7 @@ export default function AboutPage() {
         <motion.div
           initial={{ opacity: 1 }}
           animate={{ opacity: 0 }}
-          transition={{ delay: 1.8, duration: 0.5 }}
+          transition={{ delay: 2.8, duration: 0.5 }}
           className="fixed inset-0 z-50 flex items-center justify-center bg-black"
         >
           <div className="text-center">
@@ -173,7 +180,7 @@ export default function AboutPage() {
       <Navbar />
 
       {/* Section 1: The Hero Identity Card */}
-      <section className="min-h-screen flex items-center justify-center relative px-6 py-20">
+      <section className="relative px-6 pb-20">
         <div className="max-w-6xl mx-auto w-full relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
@@ -224,11 +231,11 @@ export default function AboutPage() {
                 {/* THE AXIOM */}
                 <div className="space-y-2">
                   <p className="font-mono text-xs uppercase text-cyan-400 tracking-wider">
-                    {'// THE AXIOM'}
+                    {'Research Philosophy'}
                   </p>
                   <div className="glass-effect p-6 rounded-xl border border-cyan-500/30 bg-black/20">
-                    <p className="text-sm md:text-base leading-relaxed text-cyan-300/90 italic">
-                      "My identity is a wave of infinite possibilities, but my impact is deterministic: when I enter the equation, the probability of a secure future collapses to one."
+                    <p className="text-sm md:text-base leading-relaxed text-cyan-300/90">
+                      I view security not as a barrier, but as the foundation of innovation. My work navigates the infinite possibilities of AI to ensure that its impact remains deterministic, safe, and beneficial.
                     </p>
                   </div>
                 </div>
@@ -236,13 +243,13 @@ export default function AboutPage() {
                 {/* THE PROTOCOL */}
                 <div className="space-y-2">
                   <p className="font-mono text-xs uppercase text-purple-400 tracking-wider">
-                    {'// THE PROTOCOL'}
+                    {'The Methodology'}
                   </p>
                   <div className="glass-effect p-5 rounded-xl border border-purple-500/20 bg-black/10">
                     <p className="text-gray-300 leading-relaxed">
-                      I neutralize offensive{' '}
-                      <span className="text-red-400 font-semibold">threats</span> with{' '}
-                      <span className="text-blue-400 font-semibold">Advanced & Intelligent</span> defense.
+                      I counter adversarial threats with{' '}
+                      <span className="text-red-400 font-semibold">Adaptivity & Intelligence </span> with{' '} of Machine Learning, blended with 
+                      <span className="text-blue-400 font-semibold"> Rigiour and Resilience </span> of cybersecurity.
                     </p>
                   </div>
                 </div>
@@ -250,11 +257,11 @@ export default function AboutPage() {
                 {/* PRIME DIRECTIVE */}
                 <div className="space-y-2">
                   <p className="font-mono text-xs uppercase tracking-wider">
-                    {'// MISSION'}
+                    {'Future Vision'}
                   </p>
                   <div className="glass-effect p-5 rounded-xl border border-cyan-500/20 bg-black/10">
                     <p className="text-gray-300 leading-relaxed">
-                      My mission is to engineer AI systems that are not just intelligent, but inherently resilient—building the digital guardrails that ensure technology serves humanity without compromise.
+                      My goal is to engineer AI architectures that are inherently resilient by building the transparent, ethical guardrails that ensure technology serves humanity without compromise.
                     </p>
                   </div>
                 </div>
