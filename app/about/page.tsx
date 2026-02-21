@@ -1,45 +1,87 @@
 'use client';
 
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef, useState, useEffect } from 'react';
-import { Linkedin, Github, Instagram, Mail, Shield, Zap, Building2, GraduationCap, Microscope, Activity } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import { Linkedin, Github, Instagram, Mail, Shield, Zap, Building2, GraduationCap, Microscope, Activity, AlertTriangle } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useThreatMode } from '../contexts/ThreatContext';
 import Navbar from '../components/Navbar';
 
-export default function AboutPage() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start start', 'end end'],
-  });
+// Scramble-to-real decryption animation
+function DecryptText({ text, trigger }: { text: string; trigger: boolean }) {
+  const [displayed, setDisplayed] = useState(text);
+  const chars = '!@#$%^&*<>[]{}ABCDEFXYZabcxyz0123456789';
 
-  const { isThreatMode, setThreatMode } = useThreatMode();
+  useEffect(() => {
+    if (!trigger) {
+      setDisplayed(text);
+      return;
+    }
+    let frame = 0;
+    const totalFrames = 20;
+    const interval = setInterval(() => {
+      if (frame >= totalFrames) {
+        setDisplayed(text);
+        clearInterval(interval);
+        return;
+      }
+      setDisplayed(
+        text
+          .split('')
+          .map((char, i) => {
+            if (char === ' ') return ' ';
+            if (i < Math.floor((frame / totalFrames) * text.length)) return char;
+            return chars[Math.floor(Math.random() * chars.length)];
+          })
+          .join('')
+      );
+      frame++;
+    }, 40);
+    return () => clearInterval(interval);
+  }, [trigger, text]);
 
-  // Background color transitions based on scroll and threat mode
-  const normalColors = [
-    'rgb(10, 10, 30)', // Deep Blue
-    'rgb(15, 25, 45)', // Research Blue
-    'rgb(40, 30, 10)', // Golden/Amber
-    'rgb(10, 30, 20)', // Green/Matrix
-    'rgb(20, 15, 35)', // Purple
-    'rgb(10, 10, 30)', // Back to Deep Blue
-  ];
+  return <>{displayed}</>;
+}
 
-  const threatColors = [
-    'rgb(30, 10, 10)', // Dark Red
-    'rgb(45, 15, 10)', // Crimson
-    'rgb(40, 15, 5)',  // Red-Orange
-    'rgb(35, 10, 5)',  // Deep Red
-    'rgb(40, 10, 15)', // Red-Purple
-    'rgb(30, 10, 10)', // Back to Dark Red
-  ];
+// Typewriter effect – types out text letter-by-letter
+function TypewriterText({ text, trigger }: { text: string; trigger: boolean }) {
+  const [displayed, setDisplayed] = useState('');
 
-  const backgroundColor = useTransform(
-    scrollYProgress,
-    [0, 0.2, 0.4, 0.6, 0.8, 1],
-    isThreatMode ? threatColors : normalColors
+  useEffect(() => {
+    if (!trigger) {
+      setDisplayed('');
+      return;
+    }
+    setDisplayed('');
+    let i = 0;
+    const interval = setInterval(() => {
+      if (i >= text.length) {
+        clearInterval(interval);
+        return;
+      }
+      setDisplayed(text.slice(0, i + 1));
+      i++;
+    }, 35);
+    return () => clearInterval(interval);
+  }, [trigger, text]);
+
+  return (
+    <>
+      {displayed}
+      {displayed.length < text.length && trigger && (
+        <motion.span
+          animate={{ opacity: [1, 0, 1] }}
+          transition={{ duration: 0.6, repeat: Infinity }}
+          className="inline-block w-0.5 h-4 bg-cyan-300 ml-0.5 align-middle"
+        />
+      )}
+    </>
   );
+}
+
+export default function AboutPage() {
+  const { isThreatMode, setThreatMode } = useThreatMode();
 
   const [jarvisUnlocked, setJarvisUnlocked] = useState(false);
   const [ultronUnlocked, setUltronUnlocked] = useState(false);
@@ -78,7 +120,7 @@ export default function AboutPage() {
       ],
    },
     {
-      title: 'PDEU (Dr. Rutvij Jhaveri)',
+      title: 'LLM Researcher at PDEU',
       role: 'Research on LLM Security',
       subtitle: 'The Training',
       date: '2024',
@@ -92,7 +134,7 @@ export default function AboutPage() {
       ],
     },
     {
-      title: 'IIT Gandhinagar (Summer)',
+      title: 'Research Intern at IIT Gandhinagar',
       role: 'Research Intern',
       subtitle: 'The Proving Ground',
       date: 'Summer 2024',
@@ -106,7 +148,7 @@ export default function AboutPage() {
       ],
     },
     {
-      title: 'PDEU (Dr. Rajeev Gupta)',
+      title: 'AI Researcher at PDEU',
       role: 'Independent Researcher',
       subtitle: 'The Expansion',
       date: '2024-2025',
@@ -120,7 +162,7 @@ export default function AboutPage() {
       ],
     },
     {
-      title: 'IIT Gandhinagar (Current)',
+      title: ' Research Intern at IIT Gandhinagar (Current)',
       role: 'Advanced Research Intern',
       subtitle: 'The Deployment',
       date: '2025-Present',
@@ -172,100 +214,100 @@ export default function AboutPage() {
       )}
 
       <motion.div
-        ref={containerRef}
-        style={{ backgroundColor }}
+        animate={{ backgroundColor: isThreatMode ? '#150000' : '#050510' }}
+        transition={{ duration: 1, ease: 'easeInOut' }}
         className="min-h-screen relative overflow-x-hidden"
       >
+      {/* Fixed Ambient Glassmorphism Background */}
+      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        {/* Orb 1 – Cyan (top-left) */}
+        <motion.div
+          animate={{
+            y: isThreatMode ? [0, -20, 0] : [0, 20, 0],
+            backgroundColor: isThreatMode ? 'rgba(239,68,68,0.10)' : 'rgba(6,182,212,0.10)',
+          }}
+          transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute top-[-10%] left-[-10%] w-[40vw] h-[40vw] rounded-full blur-[120px]"
+        />
+        {/* Orb 2 – Purple (bottom-right) */}
+        <motion.div
+          animate={{
+            y: isThreatMode ? [0, 20, 0] : [0, -20, 0],
+            backgroundColor: isThreatMode ? 'rgba(220,38,38,0.10)' : 'rgba(168,85,247,0.10)',
+          }}
+          transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+          className="absolute bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] rounded-full blur-[120px]"
+        />
+        {/* Orb 3 – Blue / Crimson accent (centre-right) */}
+        <motion.div
+          animate={{
+            y: isThreatMode ? [0, -15, 0] : [0, 15, 0],
+            backgroundColor: isThreatMode ? 'rgba(185,28,28,0.07)' : 'rgba(59,130,246,0.05)',
+          }}
+          transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
+          className="absolute top-[40%] left-[60%] w-[30vw] h-[30vw] rounded-full blur-[100px]"
+        />
+      </div>
+
       {/* Shared Navigation Bar */}
       <Navbar />
 
       {/* Section 1: The Hero Identity Card */}
-      <section className="relative px-6 pb-20">
-        <div className="max-w-6xl mx-auto w-full relative z-10">
+      <section className="relative px-6 pb-20 pt-8">
+        <div className="max-w-6xl mx-auto w-full relative z-10 flex justify-center">
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="glass-effect p-8 md:p-12 rounded-3xl border-2 border-white/20 shadow-2xl shadow-blue-500/20"
+            transition={{ duration: 0.8, ease: 'easeOut' }}
+            className="w-full max-w-6xl bg-white/5 backdrop-blur-lg border border-white/10 rounded-3xl p-8 md:p-12 shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)]"
           >
-            <div className="grid md:grid-cols-2 gap-12 items-center">
-              {/* Left Column: Photo & Name */}
-              <div className="flex flex-col items-center space-y-6">
-                <motion.div
-                  initial={{ scale: 0.8, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ delay: 0.2, duration: 0.8 }}
-                  className="relative"
-                >
-                  <div className="relative w-48 h-48 md:w-56 md:h-56">
-                    <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 animate-pulse opacity-75 blur-md" />
-                    <div className="relative w-full h-full rounded-full border-4 border-white/10 overflow-hidden">
-                      <Image
-                        src="/Images/kathan.jpeg"
-                        alt="Kathan Vyas"
-                        fill
-                        className="object-cover"
-                        priority
-                      />
-                    </div>
-                  </div>
-                </motion.div>
-                
-                <motion.h2
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4, duration: 0.6 }}
-                  className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent"
-                >
+            <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-8 md:gap-12 items-center">
+
+              {/* Left Column: Profile & Identity */}
+              <div className="flex flex-col items-center text-center">
+                <div className="relative w-48 h-48 rounded-full ring-2 ring-cyan-500/50 shadow-[0_0_30px_rgba(34,211,238,0.3)] overflow-hidden">
+                  <Image
+                    src="/Images/kathan.jpeg"
+                    alt="Kathan Vyas"
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                </div>
+                <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mt-6">
                   Kathan Vyas
-                </motion.h2>
+                </h2>
+                <p className="text-gray-400 text-lg mt-2">AI and Cybersecurity Researcher</p>
               </div>
 
-              {/* Right Column: Code Quote & Mission */}
-              <motion.div
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3, duration: 0.8 }}
-                className="space-y-6"
-              >
-                {/* THE AXIOM */}
-                <div className="space-y-2">
-                  <p className="font-mono text-xs uppercase text-cyan-400 tracking-wider">
-                    {'Research Philosophy'}
+              {/* Right Column: Core Directives */}
+              <div className="flex flex-col gap-8">
+
+                {/* Block 1: What I Do */}
+                <div>
+                  <span className="font-mono text-cyan-400 text-sm tracking-widest">WHAT I DO?</span>
+                  <p className="text-gray-200 text-lg leading-relaxed mt-2">
+                    I engineer intelligent and resilient solutions for complex problems. You can usually find me engaged in Artificial Intelligence or cybersecurity projects.
                   </p>
-                  <div className="glass-effect p-6 rounded-xl border border-cyan-500/30 bg-black/20">
-                    <p className="text-sm md:text-base leading-relaxed text-cyan-300/90">
-                      I view security not as a barrier, but as the foundation of innovation. My work navigates the infinite possibilities of AI to ensure that its impact remains deterministic, safe, and beneficial.
-                    </p>
-                  </div>
                 </div>
 
-                {/* THE PROTOCOL */}
-                <div className="space-y-2">
-                  <p className="font-mono text-xs uppercase text-purple-400 tracking-wider">
-                    {'The Methodology'}
+                {/* Block 2: Vision */}
+                <div>
+                  <span className="font-mono text-purple-400 text-sm tracking-widest">VISION</span>
+                  <p className="text-gray-200 text-lg leading-relaxed mt-2">
+                    To contribute to the world by securing millions of lives and their billions of devices.
                   </p>
-                  <div className="glass-effect p-5 rounded-xl border border-purple-500/20 bg-black/10">
-                    <p className="text-gray-300 leading-relaxed">
-                      I counter adversarial threats with{' '}
-                      <span className="text-red-400 font-semibold">Adaptivity & Intelligence </span> with{' '} of Machine Learning, blended with 
-                      <span className="text-blue-400 font-semibold"> Rigiour and Resilience </span> of cybersecurity.
-                    </p>
-                  </div>
                 </div>
 
-                {/* PRIME DIRECTIVE */}
-                <div className="space-y-2">
-                  <p className="font-mono text-xs uppercase tracking-wider">
-                    {'Future Vision'}
+                {/* Block 3: Mission */}
+                <div>
+                  <span className="font-mono text-blue-400 text-sm tracking-widest">MISSION</span>
+                  <p className="text-gray-200 text-lg leading-relaxed mt-2">
+                    Cultivating a digital landscape where technology empowers humanity without compromising security or privacy.
                   </p>
-                  <div className="glass-effect p-5 rounded-xl border border-cyan-500/20 bg-black/10">
-                    <p className="text-gray-300 leading-relaxed">
-                      My goal is to engineer AI architectures that are inherently resilient by building the transparent, ethical guardrails that ensure technology serves humanity without compromise.
-                    </p>
-                  </div>
                 </div>
-              </motion.div>
+
+              </div>
             </div>
           </motion.div>
         </div>
@@ -274,7 +316,7 @@ export default function AboutPage() {
       {/* Section 2: The Origin Story (Iron Man Motivation) */}
       <section className="min-h-[70vh] flex items-center justify-center relative px-6 py-16 overflow-hidden">
         {/* Marvel/Iron Man Animated Background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-red-950/50 via-yellow-950/30 to-black">
+        <div className="absolute inset-0">
           {/* Arc Reactor Pulse Rings */}
           {[0, 1, 2, 3].map((i) => (
             <motion.div
@@ -423,6 +465,56 @@ export default function AboutPage() {
               <p className="text-purple-300 font-semibold italic text-lg mt-6">
                 My goal: Build the Savior, kill the Destroyer (the way Iron Man do).
               </p>
+
+              {/* Kill Ultron Dynamic Island + Jarvis Transmission */}
+              <AnimatePresence>
+                {isThreatMode && (
+                  <motion.div
+                    key="kill-ultron-group"
+                    initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9, filter: 'blur(10px)' }}
+                    transition={{ type: 'spring', stiffness: 280, damping: 24 }}
+                    className="flex flex-col items-start gap-4 pt-2"
+                  >
+                    {/* Jarvis Message Box */}
+                    <div className="bg-blue-950/40 backdrop-blur-md border-l-4 border-cyan-400 p-4 rounded-r-2xl rounded-bl-2xl max-w-md">
+                      {/* Header */}
+                      <div className="flex items-center gap-2 mb-2">
+                        <motion.span
+                          animate={{ opacity: [1, 0.2, 1] }}
+                          transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut' }}
+                          className="w-2 h-2 rounded-full bg-cyan-400 shrink-0"
+                        />
+                        <span className="font-mono text-cyan-400 text-xs tracking-widest">
+                          &gt;_ INCOMING TRANSMISSION: J.A.R.V.I.S.
+                        </span>
+                      </div>
+                      {/* Typewriter message */}
+                      <p className="font-mono text-cyan-100 text-sm leading-relaxed">
+                        <TypewriterText
+                          text="Click on the KILL ULTRON button to save the universe."
+                          trigger={isThreatMode}
+                        />
+                      </p>
+                    </div>
+
+                    {/* Kill Ultron Button */}
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => {
+                        setUltronUnlocked(false);
+                        setThreatMode(false);
+                      }}
+                      className="inline-flex items-center gap-2 rounded-full px-6 py-3 bg-black/80 border border-cyan-400/50 shadow-[0_0_20px_rgba(34,211,238,0.4)] text-cyan-400 font-mono font-bold tracking-widest text-sm cursor-pointer select-none"
+                    >
+                      <Shield className="w-4 h-4" />
+                      KILL ULTRON
+                    </motion.button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </motion.div>
 
             {/* Right: Compact JARVIS vs ULTRON Module */}
@@ -455,13 +547,36 @@ export default function AboutPage() {
                 {!jarvisUnlocked ? (
                   <p className="text-sm text-cyan-300">Click to unlock</p>
                 ) : (
-                  <motion.div
+                  <motion.ul
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="text-sm text-gray-300"
+                    transition={{ duration: 0.4 }}
+                    className="mt-1 flex flex-col gap-2"
                   >
-                    The Guardian Protocol: Defensive AI that prioritizes protection and alignment.
-                  </motion.div>
+                    {[
+                      { href: '#', label: 'Researched Prompt Injection (Understanding Ultron)' },
+                      { href: '#', label: 'Developed Malicious Prompt Classification & Sanitization Framework (Killing the Ultron)' },
+                      { href: '#', label: 'Developed QNI-CCP Training (Strengthening Jarvis for future adversaries)' },
+                    ].map(({ href, label }, idx) => (
+                      <motion.li
+                        key={idx}
+                        initial={{ opacity: 0, x: -8 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: idx * 0.08, duration: 0.35 }}
+                      >
+                        <Link
+                          href={href}
+                          onClick={(e) => e.stopPropagation()}
+                          className="group flex items-start gap-2 rounded-lg px-3 py-2 text-sm text-cyan-300 font-mono transition-all duration-200 hover:text-white hover:bg-cyan-500/20 hover:translate-x-1"
+                        >
+                          <Shield className="w-3.5 h-3.5 mt-0.5 shrink-0 text-cyan-400 group-hover:text-white" />
+                          <span>
+                            <DecryptText text={label} trigger={jarvisUnlocked} />
+                          </span>
+                        </Link>
+                      </motion.li>
+                    ))}
+                  </motion.ul>
                 )}
               </motion.div>
 
@@ -493,13 +608,30 @@ export default function AboutPage() {
                 {!ultronUnlocked ? (
                   <p className="text-sm text-red-300">Click to unlock</p>
                 ) : (
-                  <motion.div
+                  <motion.ul
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="text-sm text-gray-300"
+                    transition={{ duration: 0.4 }}
+                    className="mt-1 flex flex-col gap-2"
                   >
-                    The Threat: Unaligned superintelligence that must be prevented at all costs.
-                  </motion.div>
+                    {[
+                      { label: 'Prompt Injection (Main Strength)' },
+                      { label: 'Adversarial Attacks (Ultron on Steroids)' },
+                    ].map(({ label }, idx) => (
+                      <motion.li
+                        key={idx}
+                        initial={{ opacity: 0, x: -8 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: idx * 0.1, duration: 0.35 }}
+                        className="flex items-start gap-2 rounded-lg px-3 py-2 text-sm text-red-400 font-mono border border-red-500/20 bg-red-500/5"
+                      >
+                        <AlertTriangle className="w-3.5 h-3.5 mt-0.5 shrink-0 text-red-400 animate-pulse" />
+                        <span>
+                          <DecryptText text={label} trigger={ultronUnlocked} />
+                        </span>
+                      </motion.li>
+                    ))}
+                  </motion.ul>
                 )}
               </motion.div>
             </div>
@@ -764,8 +896,8 @@ export default function AboutPage() {
               {
                 icon: '📜',
                 title: 'The Researcher',
-                description: '3+ Publications',
-                score: 'Elsevier/Taylor & Francis',
+                description: '3 Publications',
+                score: 'Elsevier/Taylor & Francis/IEE',
                 color: 'from-blue-500 to-purple-500',
                 delay: 0.3,
               },
@@ -884,7 +1016,7 @@ export default function AboutPage() {
                     Open to Research Positions in Leading Firms & Laboratories
                   </h4>
                   <p className="text-gray-300 text-sm md:text-base mb-4">
-                    Ready to deploy secure AI architectures. Drop your email to connect.
+                    Drop your email below to connect.
                   </p>
                 </motion.div>
 
