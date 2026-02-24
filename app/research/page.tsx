@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, User, Building, BookOpen } from 'lucide-react';
 import Image from 'next/image';
 import Navbar from '../components/Navbar';
 import {
@@ -18,6 +18,44 @@ import {
 
 // ─── Data ────────────────────────────────────────────────────────────────────
 
+const qslpStages = [
+  {
+    id: 1,
+    title: 'CNN Feature Extraction',
+    short: 'Classical processing',
+    details:
+      'We converted malware binaries into grayscale images and designed a 6-layer CNN to extract compact latent representations. The network progressively reduces spatial dimensions while preserving semantic structure. For complex datasets like Malevis, we scaled input resolution and latent dimensionality to better capture opcode density and entropy patterns. This stage bridges high-dimensional visual data with qubit-limited quantum circuits.',
+  },
+  {
+    id: 2,
+    title: 'Latent-space Perturbation',
+    short: 'QNI-CCP Defense',
+    details:
+      'We proposed Quantum Noise Injection – Class Center Perturbation (QNI-CCP), a novel defense applied after feature extraction and before quantum processing. Instead of random noise, we injected class-aware, gradient-weighted perturbations directed toward alternative class centroids. We also introduced quantum-informed scaling based on circuit depth and entanglement complexity. This ensures robustness is learned directly in the same low-dimensional space where quantum gates operate.',
+  },
+  {
+    id: 3,
+    title: 'Variational Quantum Circuit',
+    short: '6–10 qubits',
+    details:
+      'We implemented a 6–10 qubit Variational Quantum Circuit (VQC) using angle encoding and layered RY rotations with linear CNOT entanglement. Through systematic experimentation, we showed that circuit depth significantly impacts performance and robustness. The quantum layer enhanced feature separability, as validated through t-SNE visualization and variance analysis. This stage investigates practical quantum advantage under NISQ constraints.',
+  },
+  {
+    id: 4,
+    title: 'Centroid Regularization',
+    short: 'Stable feature learning',
+    details:
+      'To stabilize learning, we introduced centroid-based regularization that minimizes intra-class feature distance. This encourages smoother decision boundaries and structured latent-space clustering. Our variance and entropy analysis showed that hybrid QNN models learn more balanced feature distributions compared to classical CNNs.',
+  },
+  {
+    id: 5,
+    title: 'Adversarial Training',
+    short: 'FGSM + PGD',
+    details:
+      'We combined QNI-CCP with adversarial training using FGSM and PGD attacks. Our experiments demonstrated that latent-space defense alone is insufficient against strong iterative attacks. After integrating full QSLP training, the model achieved significantly higher F1-scores under adversarial conditions. This dual-level robustness (latent + pixel) forms the core strength of the QSLP framework.',
+  },
+];
+
 const projects = [
   {
     id: 'project-1',
@@ -28,16 +66,15 @@ const projects = [
     image: '/Images/img1 QML.png',
     lab: '5G usecase lab, IIT Gandhinagar',
     supervisor: 'Dr. Sameer G. Kulkarni',
-    Publication: 'Submitted at ACM ASIACCS',
+    Publication: 'First version submitted at ACM ASIACCS-26',
     abstract:
       'I developed QSLP, a hybrid quantum–classical framework for image-based malware detection designed to improve robustness against evolving and adversarial threats. The model integrates a novel latent-space defense mechanism, QNI-CCP, with a quantum neural layer and adversarial training. By combining latent-space perturbation and pixel-level defense, QSLP enhances generalization and resilience under FGSM and PGD attacks. This work explores practical quantum advantage for secure AI systems in the NISQ era.',
-    keyContributions:[
-        'Designed QSLP, a unified hybrid quantum–classical architecture for robust image-based malware detection.',
-        'Proposed QNI-CCP, a novel class-aware latent-space perturbation defense before quantum processing.',
-        'Integrated dual-level robustness using latent-space defense and adversarial training (FGSM, PGD).',
-        'Performed systematic benchmarking of CNN, QNN, and hybrid models under adversarial settings.',
-        'Analyzed trade-offs between quantum expressivity, robustness, and computational overhead in NISQ devices.',
-
+    keyContributions: [
+      { highlight: 'Designed QSLP', rest: ', a unified hybrid quantum–classical architecture for robust image-based malware detection.' },
+      { highlight: 'Proposed QNI-CCP', rest: ', a novel class-aware latent-space perturbation defense before quantum processing.' },
+      { highlight: 'Integrated dual-level robustness', rest: ' using latent-space defense and adversarial training (FGSM, PGD).' },
+      { highlight: 'Systematic benchmarking', rest: ' of CNN, QNN, and hybrid models under adversarial settings.' },
+      { highlight: 'Analyzed trade-offs', rest: ' between quantum expressivity, robustness, and computational overhead in NISQ devices.' },
     ],
       
     detailedInfo: [
@@ -185,6 +222,111 @@ const projects = [
   },
 ];
 
+// ─── Architecture Pipeline ───────────────────────────────────────────────────
+
+const STAGE_COLORS = [
+  { ring: 'ring-cyan-500/50',    text: 'text-cyan-400',   badge: 'bg-cyan-500/10 text-cyan-300',   dot: 'bg-cyan-400' },
+  { ring: 'ring-purple-500/50',  text: 'text-purple-400', badge: 'bg-purple-500/10 text-purple-300', dot: 'bg-purple-400' },
+  { ring: 'ring-blue-500/50',    text: 'text-blue-400',   badge: 'bg-blue-500/10 text-blue-300',    dot: 'bg-blue-400' },
+  { ring: 'ring-violet-500/50',  text: 'text-violet-400', badge: 'bg-violet-500/10 text-violet-300', dot: 'bg-violet-400' },
+  { ring: 'ring-pink-500/50',    text: 'text-pink-400',   badge: 'bg-pink-500/10 text-pink-300',    dot: 'bg-pink-400' },
+];
+
+function ArchitecturePipeline({ stages }: { stages: typeof qslpStages }) {
+  const [active, setActive] = useState<number | null>(null);
+  const [hovered, setHovered] = useState<number | null>(null);
+
+  const activeStage = active !== null ? stages[active] : null;
+  const color = active !== null ? STAGE_COLORS[active % STAGE_COLORS.length] : null;
+
+  return (
+    <div className="mt-8">
+      {/* Pipeline cards row */}
+      <div className="flex flex-wrap gap-3 items-stretch">
+        {stages.map((stage, i) => {
+          const c = STAGE_COLORS[i % STAGE_COLORS.length];
+          const isActive  = active  === i;
+          const isHovered = hovered === i;
+          return (
+            <div key={stage.id} className="flex items-center gap-2">
+              {/* Card */}
+              <motion.button
+                style={{ transformStyle: 'preserve-3d', perspective: 800 }}
+                animate={{
+                  rotateY: isActive ? 4 : isHovered ? 2 : 0,
+                  rotateX: isActive ? -3 : isHovered ? -1 : 0,
+                  y:       isActive ? -6 : isHovered ? -3 : 0,
+                  scale:   isActive ? 1.04 : 1,
+                }}
+                transition={{ type: 'spring', stiffness: 260, damping: 22 }}
+                onClick={() => setActive(isActive ? null : i)}
+                onHoverStart={() => setHovered(i)}
+                onHoverEnd={() => setHovered(null)}
+                className={`relative flex flex-col items-start text-left px-4 py-3 rounded-xl border bg-white/5 backdrop-blur-sm ring-1 transition-colors cursor-pointer min-w-[128px] max-w-[160px] ${
+                  isActive
+                    ? `border-white/20 ${c.ring} bg-white/8`
+                    : 'border-white/10 ring-transparent hover:border-white/20'
+                }`}
+              >
+                {/* Step number */}
+                <span className={`text-[10px] font-mono mb-1 ${c.text}`}>{String(stage.id).padStart(2, '0')}</span>
+                {/* Title */}
+                <span className="text-xs font-semibold text-white leading-snug">{stage.title}</span>
+                {/* Short label */}
+                <span className={`mt-1.5 text-[10px] px-2 py-0.5 rounded-full font-mono ${c.badge}`}>
+                  {stage.short}
+                </span>
+                {/* Active indicator dot */}
+                {isActive && (
+                  <motion.span
+                    layoutId="activeDot"
+                    className={`absolute -top-1.5 -right-1.5 w-3 h-3 rounded-full ${c.dot} ring-2 ring-black`}
+                  />
+                )}
+              </motion.button>
+              {/* Connector arrow (not after last item) */}
+              {i < stages.length - 1 && (
+                <svg width="20" height="12" viewBox="0 0 20 12" fill="none" className="shrink-0 text-white/20">
+                  <path d="M0 6h16M12 1l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Detail panel */}
+      <motion.div
+        initial={false}
+        animate={{ height: activeStage ? 'auto' : 0, opacity: activeStage ? 1 : 0 }}
+        transition={{ duration: 0.35, ease: 'easeInOut' }}
+        className="overflow-hidden"
+      >
+        {activeStage && color && (
+          <motion.div
+            key={active}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            className={`mt-4 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-5 ring-1 ${color.ring}`}
+          >
+            <div className="flex items-center gap-3 mb-3">
+              <span className={`text-[10px] font-mono ${color.text}`}>
+                STAGE {String(activeStage.id).padStart(2, '0')}
+              </span>
+              <span className="text-white font-semibold text-sm">{activeStage.title}</span>
+              <span className={`ml-auto text-[10px] px-2 py-0.5 rounded-full font-mono ${color.badge}`}>
+                {activeStage.short}
+              </span>
+            </div>
+            <p className="text-gray-400 text-sm leading-relaxed">{activeStage.details}</p>
+          </motion.div>
+        )}
+      </motion.div>
+    </div>
+  );
+}
+
 // ─── Results Section ─────────────────────────────────────────────────────────
 
 type ResultsData = NonNullable<(typeof projects)[number]['results']>;
@@ -232,7 +374,7 @@ function ResultsSection({ results }: { results: ResultsData }) {
   );
 
   return (
-    <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4 items-start w-full">
+    <div className="mt-8 grid grid-cols-1 xl:grid-cols-2 gap-8 items-start w-full">
 
       {/* ── Bar Chart ── */}
       <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
@@ -341,6 +483,61 @@ function ResultsSection({ results }: { results: ResultsData }) {
         </p>
       </div>
 
+      {/* ── t-SNE Latent Space Visualizations ── */}
+      <div className="col-span-1 xl:col-span-2 bg-white/5 p-6 md:p-8 rounded-2xl border border-white/10 mt-4">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+          <h4 className="text-cyan-400 font-mono text-sm tracking-widest uppercase">
+            Latent Space Visualization (t-SNE)
+          </h4>
+          <DatasetToggle />
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
+          {/* Left — Classical CNN */}
+          <div>
+            <p className="text-gray-400 text-center mb-3 text-sm font-semibold tracking-wide">
+              Classical CNN
+            </p>
+            <div className="relative w-full aspect-square md:aspect-[4/3] bg-white/5 rounded-xl overflow-hidden border border-white/10 p-2">
+              <Image
+                src={
+                  dataset === 'malimg'
+                    ? '/Images/CNN-tnse-dataset1 (1).svg'
+                    : '/Images/CNN-tnse-dataset2 (1).svg'
+                }
+                alt="Classical CNN t-SNE"
+                fill
+                className="object-contain p-2"
+              />
+            </div>
+          </div>
+
+          {/* Right — Hybrid QNN */}
+          <div>
+            <p className="text-purple-400 text-center mb-3 text-sm font-semibold tracking-wide">
+              Hybrid QNN (QNI-CCP)
+            </p>
+            <div className="relative w-full aspect-square md:aspect-[4/3] bg-white/5 rounded-xl overflow-hidden border border-white/10 p-2">
+              <Image
+                src={
+                  dataset === 'malimg'
+                    ? '/Images/QNN-tnse-dataset1.svg'
+                    : '/Images/QNN-dataset2 (1).svg'
+                }
+                alt="Hybrid QNN t-SNE"
+                fill
+                className="object-contain p-2"
+              />
+            </div>
+          </div>
+        </div>
+
+        <p className="text-gray-500 text-xs text-center mt-6">
+          Comparative t-SNE plots demonstrating tighter cluster formation (compactness) and superior
+          class separation in the Hybrid QNN latent space.
+        </p>
+      </div>
+
     </div>
   );
 }
@@ -402,8 +599,32 @@ function ResearchSection({
         {project.title.includes(': ') ? project.title.split(': ')[1] : project.title}
       </h2>
 
+      {/* Research Metadata */}
+      {(project.supervisor || project.lab || project.Publication) && (
+        <div className="flex flex-wrap items-center gap-x-8 gap-y-3 mt-4 mb-8 text-sm text-gray-400 font-mono">
+          {project.supervisor && (
+            <div className="flex items-center gap-2">
+              <User size={16} className="text-cyan-400" />
+              <span>Supervisor: {project.supervisor}</span>
+            </div>
+          )}
+          {project.lab && (
+            <div className="flex items-center gap-2">
+              <Building size={16} className="text-purple-400" />
+              <span>Lab: {project.lab}</span>
+            </div>
+          )}
+          {project.Publication && (
+            <div className="flex items-center gap-2">
+              <BookOpen size={16} className="text-blue-400" />
+              <span>Status: {project.Publication}</span>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Image */}
-      <div className="w-full aspect-[21/9] relative bg-white/5 border border-white/10 rounded-2xl overflow-hidden mt-8">
+      <div className="w-full aspect-[21/9] relative bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
         {project.image ? (
           <Image
             src={project.image}
@@ -421,7 +642,7 @@ function ResearchSection({
       {/* Fixed topic: Abstract */}
       <div className={`mt-8 border-l-2 ${project.borderColor} pl-5`}>
         <h3 className="text-xs font-mono tracking-widest text-gray-500 uppercase mb-2">
-          Abstract
+          Overview
         </h3>
         <p className="text-gray-300 text-lg leading-relaxed">{project.abstract}</p>
       </div>
@@ -431,15 +652,36 @@ function ResearchSection({
         <h3 className="text-xs font-mono tracking-widest text-gray-500 uppercase mb-2">
           Key Contributions
         </h3>
-        <ul className="mt-2 flex flex-col gap-2">
-          {(project.keyContributions as string[]).map((point, i) => (
+        <ul className="mt-2 flex flex-col gap-4 max-w-4xl">
+          {(project.keyContributions as (string | { highlight: string; rest: string })[]).map((point, i) => (
             <li key={i} className="flex items-start gap-2 text-gray-300 leading-relaxed">
               <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-cyan-400/70" />
-              {point}
+              {typeof point === 'string' ? (
+                point
+              ) : (
+                <>
+                  <span className="underline decoration-cyan-500/50 decoration-2 underline-offset-[6px] text-gray-200">
+                    {point.highlight}
+                  </span>
+                  {point.rest}
+                </>
+              )}
             </li>
           ))}
         </ul>
       </div>
+
+      {/* Architecture Overview — project-1 only */}
+      {'pipeline' in project && project.pipeline === true && null}
+      {project.id === 'project-1' && (
+        <div className="mt-8 border-l-2 border-cyan-500/40 pl-5">
+          <h3 className="text-xs font-mono tracking-widest text-gray-500 uppercase mb-1">
+            Architecture Overview
+          </h3>
+          <p className="text-gray-600 text-[11px] font-mono mb-4">Click a stage to expand details</p>
+          <ArchitecturePipeline stages={qslpStages} />
+        </div>
+      )}
 
       {/* Collapsibles */}
       <div className="mt-6 flex flex-col gap-3">
@@ -476,7 +718,56 @@ function ResearchSection({
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function ResearchPage() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+      document.body.style.overflow = '';
+    }, 3000);
+    return () => {
+      clearTimeout(timer);
+      document.body.style.overflow = '';
+    };
+  }, []);
+
   return (
+    <>
+      {/* Preloader Overlay */}
+      {isLoading && (
+        <motion.div
+          initial={{ opacity: 1 }}
+          animate={{ opacity: 0 }}
+          transition={{ delay: 2.8, duration: 0.5 }}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black"
+        >
+          <div className="text-center">
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ repeat: Infinity, duration: 2, ease: 'linear' }}
+              className="w-16 h-16 mx-auto mb-6 border-4 border-cyan-500 border-t-transparent rounded-full"
+            />
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3, duration: 0.8 }}
+              className="text-cyan-400 text-xl tracking-widest mb-2"
+            >
+              Initiating Digital Lab Sequence...
+            </motion.p>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.2, duration: 0.8 }}
+              className="text-gray-400 text-sm"
+            >
+              Glad to have you here.
+            </motion.p>
+          </div>
+        </motion.div>
+      )}
+
     <main className="w-full min-h-screen overflow-x-hidden">
       <Navbar />
 
@@ -525,5 +816,6 @@ export default function ResearchPage() {
         </div>
       </div>
     </main>
+    </>
   );
 }
