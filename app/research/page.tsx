@@ -70,11 +70,11 @@ const projects = [
     abstract:
       'I developed QSLP, a hybrid quantum–classical framework for image-based malware detection designed to improve robustness against evolving and adversarial threats. The model integrates a novel latent-space defense mechanism, QNI-CCP, with a quantum neural layer and adversarial training. By combining latent-space perturbation and pixel-level defense, QSLP enhances generalization and resilience under FGSM and PGD attacks. This work explores practical quantum advantage for secure AI systems in the NISQ era.',
     keyContributions: [
-      { highlight: 'Designed QSLP', rest: ', a unified hybrid quantum–classical architecture for robust image-based malware detection.' },
-      { highlight: 'Proposed QNI-CCP', rest: ', a novel class-aware latent-space perturbation defense before quantum processing.' },
+      { highlight: 'Designed QSLP', rest: '- a unified hybrid quantum–classical architecture for robust image-based malware detection.' },
+      { highlight: 'Proposed QNI-CCP', rest: '- a novel class-aware latent-space perturbation defense before quantum processing.' },
       { highlight: 'Integrated dual-level robustness', rest: ' using latent-space defense and adversarial training (FGSM, PGD).' },
-      { highlight: 'Systematic benchmarking', rest: ' of CNN, QNN, and hybrid models under adversarial settings.' },
-      { highlight: 'Analyzed trade-offs', rest: ' between quantum expressivity, robustness, and computational overhead in NISQ devices.' },
+      { highlight: 'Systematic benchmarking', rest: 'of Classical and hybrid models under adversarial settings.' },
+      { highlight: 'Analyzed trade-offs', rest: 'between quantum expressivity, robustness, and computational overhead in NISQ devices.' },
     ],
       
     detailedInfo: [
@@ -374,17 +374,20 @@ function ResultsSection({ results }: { results: ResultsData }) {
   );
 
   return (
-    <div className="mt-8 grid grid-cols-1 xl:grid-cols-2 gap-8 items-start w-full">
+    <div className="mt-8 flex flex-col gap-6 w-full">
+
+      {/* ── Bar Chart + Pattern Learning Table side by side ── */}
+      <div className="flex flex-col lg:flex-row gap-4 items-start">
 
       {/* ── Bar Chart ── */}
-      <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
+      <div className="flex-1 bg-white/5 border border-white/10 rounded-2xl p-5 min-w-0">
         <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
           <h3 className="text-white font-semibold text-sm">Accuracy Under Adversarial Conditions</h3>
           <DatasetToggle />
         </div>
 
         <ResponsiveContainer width="100%" height={220}>
-          <BarChart data={chartData} barCategoryGap="28%" barGap={3}>
+          <BarChart data={chartData} barCategoryGap="18%" barGap={2}>
             <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" vertical={false} />
             <XAxis
               dataKey="condition"
@@ -422,83 +425,85 @@ function ResultsSection({ results }: { results: ResultsData }) {
                 dataKey={key}
                 fill={BAR_COLORS[key]}
                 radius={[4, 4, 0, 0]}
-                maxBarSize={32}
+                maxBarSize={20}
               />
             ))}
           </BarChart>
         </ResponsiveContainer>
       </div>
 
-      {/* ── Pattern Learning Table ── */}
-      <div className="bg-white/5 border border-white/10 rounded-2xl p-5 overflow-x-auto">
-        <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
-          <h3 className="text-white font-semibold text-sm">Pattern Learning Analysis</h3>
-          <DatasetToggle />
+        {/* Pattern Learning Table */}
+        <div className="lg:w-72 xl:w-80 bg-white/5 border border-white/10 rounded-2xl p-4 overflow-x-auto shrink-0">
+          <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
+            <h3 className="text-white font-semibold text-sm">Pattern Learning Analysis</h3>
+            <DatasetToggle />
+          </div>
+
+          <table className="w-full text-xs font-mono border-collapse">
+            <thead>
+              <tr>
+                <th className="text-left text-gray-500 uppercase tracking-widest pb-2 pr-2">Metric</th>
+                {tableColumns.map(({ header }, i) => (
+                  <th
+                    key={i}
+                    className={`text-center pb-2 px-1 ${
+                      tableDataset === 'malimg' ? 'text-cyan-400' : 'text-purple-400'
+                    }`}
+                  >
+                    {header}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {results.patternTable.map((row, i) => (
+                <tr
+                  key={i}
+                  className={`border-t border-white/5 ${i % 2 === 0 ? '' : 'bg-white/[0.02]'}`}
+                >
+                  <td className="py-1.5 pr-2 text-gray-300 whitespace-nowrap">{row.metric}</td>
+                  {tableColumns.map(({ key }, j) => {
+                    const isQni = key.toLowerCase().includes('qni') && row.highlight === 'qni';
+                    return (
+                      <td
+                        key={j}
+                        className={`text-center py-1.5 px-1 ${
+                          isQni ? 'text-cyan-300 font-bold' : 'text-gray-400'
+                        }`}
+                      >
+                        {row[key]}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <p className="mt-3 text-gray-600 text-[10px]">
+            <span className="text-gray-400">Note: </span>
+            H-QNN: basic hybrid quantum-classical model &nbsp;·&nbsp;
+            QNI: QNI-CCP trained &nbsp;·&nbsp; CNN: Classical model
+          </p>
         </div>
 
-        <table className="w-full text-xs font-mono border-collapse">
-          <thead>
-            <tr>
-              <th className="text-left text-gray-500 uppercase tracking-widest pb-2 pr-3">Metric</th>
-              {tableColumns.map(({ header }, i) => (
-                <th
-                  key={i}
-                  className={`text-center pb-2 px-2 ${
-                    tableDataset === 'malimg' ? 'text-cyan-400' : 'text-purple-400'
-                  }`}
-                >
-                  {header}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {results.patternTable.map((row, i) => (
-              <tr
-                key={i}
-                className={`border-t border-white/5 ${i % 2 === 0 ? '' : 'bg-white/[0.02]'}`}
-              >
-                <td className="py-2 pr-3 text-gray-300 whitespace-nowrap">{row.metric}</td>
-                {tableColumns.map(({ key }, j) => {
-                  const isQni = key.toLowerCase().includes('qni') && row.highlight === 'qni';
-                  return (
-                    <td
-                      key={j}
-                      className={`text-center py-2 px-2 ${
-                        isQni ? 'text-cyan-300 font-bold' : 'text-gray-400'
-                      }`}
-                    >
-                      {row[key]}
-                    </td>
-                  );
-                })}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <p className="mt-3 text-gray-600 text-[10px]">
-          <span className="text-gray-400">Note: </span>
-          H-QNN: basic hybrid quantum-classical model &nbsp;·&nbsp;
-          QNI: QNI-CCP trained &nbsp;·&nbsp; CNN: Classical model
-        </p>
       </div>
 
-      {/* ── t-SNE Latent Space Visualizations ── */}
-      <div className="col-span-1 xl:col-span-2 bg-white/5 p-6 md:p-8 rounded-2xl border border-white/10 mt-4">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-          <h4 className="text-cyan-400 font-mono text-sm tracking-widest uppercase">
+      {/* ── t-SNE Latent Space Visualizations (full width) ── */}
+      <div className="bg-white/5 p-4 rounded-2xl border border-white/10">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
+          <h4 className="text-cyan-400 font-mono text-xs tracking-widest uppercase">
             Latent Space Visualization (t-SNE)
           </h4>
           <DatasetToggle />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
+        <div className="grid grid-cols-2 gap-3">
           {/* Left — Classical CNN */}
           <div>
-            <p className="text-gray-400 text-center mb-3 text-sm font-semibold tracking-wide">
+            <p className="text-gray-400 text-center mb-2 text-xs font-semibold tracking-wide">
               Classical CNN
             </p>
-            <div className="relative w-full aspect-square md:aspect-[4/3] bg-white/5 rounded-xl overflow-hidden border border-white/10 p-2">
+            <div className="relative w-full aspect-[4/3] bg-white/5 rounded-xl overflow-hidden border border-white/10">
               <Image
                 src={
                   dataset === 'malimg'
@@ -507,17 +512,17 @@ function ResultsSection({ results }: { results: ResultsData }) {
                 }
                 alt="Classical CNN t-SNE"
                 fill
-                className="object-contain p-2"
+                className="object-contain p-1"
               />
             </div>
           </div>
 
           {/* Right — Hybrid QNN */}
           <div>
-            <p className="text-purple-400 text-center mb-3 text-sm font-semibold tracking-wide">
+            <p className="text-purple-400 text-center mb-2 text-xs font-semibold tracking-wide">
               Hybrid QNN (QNI-CCP)
             </p>
-            <div className="relative w-full aspect-square md:aspect-[4/3] bg-white/5 rounded-xl overflow-hidden border border-white/10 p-2">
+            <div className="relative w-full aspect-[4/3] bg-white/5 rounded-xl overflow-hidden border border-white/10">
               <Image
                 src={
                   dataset === 'malimg'
@@ -526,15 +531,14 @@ function ResultsSection({ results }: { results: ResultsData }) {
                 }
                 alt="Hybrid QNN t-SNE"
                 fill
-                className="object-contain p-2"
+                className="object-contain p-1"
               />
             </div>
           </div>
         </div>
 
-        <p className="text-gray-500 text-xs text-center mt-6">
-          Comparative t-SNE plots demonstrating tighter cluster formation (compactness) and superior
-          class separation in the Hybrid QNN latent space.
+        <p className="text-gray-500 text-[10px] text-center mt-3">
+          Comparative t-SNE plots demonstrating tighter cluster formation and superior class separation in the Hybrid QNN latent space.
         </p>
       </div>
 
