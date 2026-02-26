@@ -60,6 +60,7 @@ const projects = [
   {
     id: 'project-1',
     indexLabel: 'Quantum Machine Learning, Adversarial ML, Deep Learning, Malware classification',
+    sidebarLabel: 'QML for Cybersecurity',
     title: 'Project Alpha: Adversarially Robust Quantum-Classical Neural Network for Malware Detection',
     accentColor: 'text-cyan-400',
     borderColor: 'border-cyan-500/40',
@@ -150,16 +151,22 @@ const projects = [
   },
   {
     id: 'project-2',
-    indexLabel: 'Project Beta',
-    title: 'Project Beta: Adversarial Robustness in LLMs',
+    indexLabel: 'NLP, Bert, Machine Learning, SHAP, Explainable AI',
+    sidebarLabel: 'Malicious Prompt Classifier',
+    title: 'Malicious Prompt Classifier with Leave-One-Out Deletion Approach for Prompt Sanitization',
     accentColor: 'text-purple-400',
     borderColor: 'border-purple-500/40',
+    image: '/Images/research2.png',
+    lab: 'AI-ML Lab, PDEU',
+    supervisor: 'Dr. Rajeev Gupta',
+    Publication: 'Accpeted at Procedia of Computer Science, Elsevier',
     abstract:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.',
+      'I developed a malicious prompt detection and sanitization framework to defend Large Language Models against prompt injection attacks. The system combines SBERT sentence embeddings with XGBoost (95% accuracy) and a probabilistic Markov Chain model (90.79% accuracy) for structural reasoning. To overcome limitations of SHAP-based token attribution, I proposed a novel Leave-One-Out deletion (LODO) approach that identifies causally malicious tokens. The framework enables intent-preserving prompt sanitization through impact-based token replacement rather than simple block-or-allow filtering.',
     keyContributions: [
-      'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
-      'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-      'Extensive literature review on adversarial robustness in large language models.',
+      'Bridged the Gap Between Detection and Sanitization: Moved beyond traditional “block-or-allow” classification',
+      'A Hybrid Detection Pipeline: Achieved ~95% accuracy using embedding-based classification and 90.79% accuracy with an interpretable Markov Chain model capturing structural prompt patterns.',
+      'Semantic-Aware Token Replacement: controlled rewriting strategy using a substitution dictionary and embedding-based cosine similarity to preserve user intent.',
+      'Novel LODO-Based Sanitization Framework: measures the causal impact of each token by iteratively removing words and reassessing malicious probability.',
     ],
     detailedInfo: [
       {
@@ -186,7 +193,8 @@ const projects = [
   },
   {
     id: 'project-3',
-    indexLabel: 'Project Gamma',
+    indexLabel: 'LLM Security, Prompt Injection, Red Teaming',
+    sidebarLabel: 'Prompt Injection Study',
     title: 'Project Gamma: Federated Security Protocols',
     accentColor: 'text-blue-400',
     borderColor: 'border-blue-500/40',
@@ -374,13 +382,10 @@ function ResultsSection({ results }: { results: ResultsData }) {
   );
 
   return (
-    <div className="mt-8 flex flex-col gap-6 w-full">
-
-      {/* ── Bar Chart + Pattern Learning Table side by side ── */}
-      <div className="flex flex-col lg:flex-row gap-4 items-start">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
 
       {/* ── Bar Chart ── */}
-      <div className="flex-1 bg-white/5 border border-white/10 rounded-2xl p-5 min-w-0">
+      <div className="bg-white/5 border border-white/10 rounded-2xl p-5 min-w-0">
         <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
           <h3 className="text-white font-semibold text-sm">Accuracy Under Adversarial Conditions</h3>
           <DatasetToggle />
@@ -433,7 +438,7 @@ function ResultsSection({ results }: { results: ResultsData }) {
       </div>
 
         {/* Pattern Learning Table */}
-        <div className="lg:w-72 xl:w-80 bg-white/5 border border-white/10 rounded-2xl p-4 overflow-x-auto shrink-0">
+        <div className="bg-white/5 border border-white/10 rounded-2xl p-4 overflow-x-auto">
           <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
             <h3 className="text-white font-semibold text-sm">Pattern Learning Analysis</h3>
             <DatasetToggle />
@@ -486,10 +491,8 @@ function ResultsSection({ results }: { results: ResultsData }) {
           </p>
         </div>
 
-      </div>
-
       {/* ── t-SNE Latent Space Visualizations (full width) ── */}
-      <div className="bg-white/5 p-4 rounded-2xl border border-white/10">
+      <div className="col-span-1 lg:col-span-2 bg-white/5 p-4 rounded-2xl border border-white/10">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
           <h4 className="text-cyan-400 font-mono text-xs tracking-widest uppercase">
             Latent Space Visualization (t-SNE)
@@ -497,7 +500,7 @@ function ResultsSection({ results }: { results: ResultsData }) {
           <DatasetToggle />
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8 mt-6">
           {/* Left — Classical CNN */}
           <div>
             <p className="text-gray-400 text-center mb-2 text-xs font-semibold tracking-wide">
@@ -634,7 +637,7 @@ function ResearchSection({
             src={project.image}
             alt={project.title}
             fill
-            className="object-cover"
+            className="object-contain"
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center text-gray-500 text-sm font-mono">
@@ -658,18 +661,20 @@ function ResearchSection({
         </h3>
         <ul className="mt-2 flex flex-col gap-4 max-w-4xl">
           {(project.keyContributions as (string | { highlight: string; rest: string })[]).map((point, i) => (
-            <li key={i} className="flex items-start gap-2 text-gray-300 leading-relaxed">
-              <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-cyan-400/70" />
-              {typeof point === 'string' ? (
-                point
-              ) : (
-                <>
-                  <span className="underline decoration-cyan-500/50 decoration-2 underline-offset-[6px] text-gray-200">
-                    {point.highlight}
-                  </span>
-                  {point.rest}
-                </>
-              )}
+            <li key={i} className="flex items-start gap-3">
+              <span className="mt-2 w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.8)] flex-shrink-0"></span>
+              <p className="text-gray-300 text-[1.05rem] leading-relaxed">
+                {typeof point === 'string' ? (
+                  point
+                ) : (
+                  <>
+                    <span className="underline decoration-cyan-500/50 decoration-2 underline-offset-[6px] text-gray-200 mr-2">
+                      {point.highlight}
+                    </span>
+                    {point.rest}
+                  </>
+                )}
+              </p>
             </li>
           ))}
         </ul>
@@ -811,7 +816,7 @@ export default function ResearchPage() {
                   href={`#${p.id}`}
                   className="block text-sm text-gray-500 hover:text-cyan-400 transition-colors duration-300 mt-4 truncate"
                 >
-                  {p.indexLabel}
+                  {(p as typeof p & { sidebarLabel?: string }).sidebarLabel ?? p.indexLabel}
                 </a>
               ))}
             </nav>
