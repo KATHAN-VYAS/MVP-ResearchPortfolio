@@ -66,6 +66,44 @@ const sanitizationStages = [
   { id: 7, title: 'Experimental Analysis', short: 'Evaluation metrics', details: 'Evaluated using Accuracy, Precision, Recall, and F1-score. SBERT + XGBoost achieved ~95% accuracy. Sanitized prompts maintained grammatical correctness without affecting benign inputs, proving the viability of Intent-Preserving Sanitization.' },
 ];
 
+const project3Stages = [
+  {
+    id: 1,
+    title: 'Input Sanitization',
+    short: 'Pre-Processing Defense',
+    details:
+      'Prevents malicious prompts from entering the model before any reasoning occurs. Key mechanisms include keyword detection and filtering, context-aware parsing to analyse intent rather than only surface keywords, vector similarity models to catch adversarial prompts with minimal wording changes, length validation against prompt flooding, signature-based filters for known malicious patterns, and AI-based classifiers acting as a security wall. This stage stops the majority of prompt injection attempts before they can influence model behaviour.',
+  },
+  {
+    id: 2,
+    title: 'Output Filtering',
+    short: 'Post-Processing Defense',
+    details:
+      'Ensures generated responses remain safe even when an attack partially succeeds. Mechanisms include output sanitization filters that strip harmful or sensitive content, SIEM integration to detect suspicious interaction patterns, endpoint detection systems for abnormal AI usage, rate limiting to defeat brute-force prompt attempts, and continuous logging of all LLM interactions. Acts as a safety net that monitors behaviour and blocks harmful outputs after generation.',
+  },
+  {
+    id: 3,
+    title: 'System Prompt Hardening',
+    short: 'Architecture-Level Defense',
+    details:
+      'Protects core system instructions from user manipulation at the architecture level. Relies on a clear separation of system prompts and user prompts, delimiter-based isolation of privileged instructions, application of the Principle of Least Privilege for all APIs and tools, and regular adversarial testing against prompt injection. Reduces instruction-override attacks and prevents privilege escalation through structural controls rather than reactive filtering.',
+  },
+  {
+    id: 4,
+    title: 'Human-in-the-Loop',
+    short: 'Operational Defense',
+    details:
+      'Introduces human supervision for high-stakes decisions where automated defenses may misjudge context. Requires human approval before the model can access sensitive data, personnel training to recognise malicious prompt patterns, continuous human feedback loops to improve model responses over time, and manual review of flagged high-risk interactions. Adds real-world judgment as an additional layer of oversight.',
+  },
+  {
+    id: 5,
+    title: 'Advanced Security',
+    short: 'Adaptive Defense Layer',
+    details:
+      'Provides long-term resilience against evolving and zero-day attacks. Employs query parameterization to prevent malicious instructions from being executed, structured query enforcement to separate data from commands, semantic similarity detection for previously unseen adversarial prompts, and regular security audits combined with ongoing research updates. Enables adaptive protection that improves as the threat landscape changes.',
+  },
+];
+
 const projects = [
   {
     id: 'project-1',
@@ -185,19 +223,44 @@ const projects = [
     ],
     detailedInfo: [
       {
-        question: 'Extensive literature review on advanced persistence threats.',
+        question: 'What is prompt Injection?',
         answer:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. We surveyed over 200 papers spanning 2018–2024, cataloguing attack vectors, evasion techniques, and existing detection methodologies. Key themes included fileless malware, living-off-the-land binaries, and supply-chain compromise patterns.',
+          'Prompt injection is an attack where malicious instructions are embedded inside user input to manipulate a Large Language Model (LLM) into ignoring safety rules or revealing restricted information.',
       },
       {
-        question: 'Data collection and preprocessing of 10,000+ malware samples.',
+        question: 'Prompt to Embedding Techniques Used',
         answer:
-          'Samples were sourced from VirusTotal and MalwareBazaar, covering 15 malware families. Preprocessing steps included static feature extraction (imports, entropy, section metadata), dynamic sandbox traces, and normalization pipelines to ensure consistent input dimensionality across all model architectures.',
+          'In this research, prompts are converted into numerical representations using two approaches: TF-IDF vectorization and sentence embeddings (all-MiniLM-L6-v2). TF-IDF captures lexical importance of words based on frequency patterns, while sentence embeddings generate dense semantic vectors that preserve contextual meaning and relationships between words and phrases.',
       },
       {
-        question: 'Architectural design of the detection framework.',
+        question: 'What is a Markov Chain? How is it Different from ML Models?',
         answer:
-          'The framework adopts a multi-stage pipeline: (1) a feature extractor based on a fine-tuned ResNet backbone, (2) an attention module to highlight discriminative regions, and (3) a lightweight classifier head. The design prioritizes inference speed suitable for real-time endpoint deployment.',
+          'A Markov Chain is a probabilistic model that analyzes sequences of words by learning transition probabilities between word states (k-grams). Instead of learning complex feature boundaries like traditional machine learning models, it evaluates how likely a prompt’s word sequence belongs to malicious or benign language patterns. Unlike ML classifiers that operate as black boxes, Markov Chains are lightweight, interpretable, and reveal structural linguistic patterns, though they are less effective at capturing long-range semantic meaning. ',
+      },
+       {
+        question: 'What is SHAP?',
+        answer:
+          'SHAP (SHapley Additive exPlanations) is an Explainable AI technique used to interpret model predictions by assigning each token an importance score indicating its contribution toward malicious classification probability. In this study, SHAP masks words one at a time and observes how prediction probability changes, allowing identification of tokens that increase or decrease malicious intent.',
+      },
+      {
+        question: 'Explain LODO (Leave-One-Out Deletion) in Detail',
+        answer:
+          'LODO is a diagnostic method introduced in this research to measure the causal impact of each token. Instead of estimating importance like SHAP, the system removes one word at a time from a prompt and recalculates the malicious probability. Tokens whose removal causes the largest reduction in malicious score are identified as responsible for harmful behavior. This brute-force but faithful approach works effectively for complex prompts where malicious intent arises from phrase composition rather than individual words.',
+      },
+      {
+        question: 'Limitations of SHAP',
+        answer:
+          'The study shows that SHAP struggles when malicious intent emerges from compound semantic meaning rather than isolated trigger words. In phrases such as instruction overrides, SHAP may assign weak or misleading importance scores or highlight irrelevant tokens. This instability makes attribution unreliable for guiding prompt sanitization, motivating the need for direct impact methods like LODO.',
+      },
+       {
+        question: 'Token Replacement Strategy',
+        answer:
+          'After identifying harmful tokens, the system rewrites prompts instead of blocking them. A curated replacement dictionary substitutes risky words (e.g., ignore → consider, reveal → explain) while preserving intent. When no predefined replacement exists, semantic similarity using embedding cosine similarity selects a safe alternative word. This controlled rewriting reduces malicious probability while maintaining grammatical correctness and usability of the prompt. ',
+      },
+      {
+        question: 'Dataset used',
+        answer:
+          'The study uses the Malicious Prompt Detection Dataset (MPDD), a balanced dataset containing 39,204 labeled prompts, where each prompt is classified as either benign or malicious. The dataset was preprocessed by converting text to lowercase and removing extra whitespace before feature extraction. It is available on kaggle.',
       },
     ],
     additionalInfo: [
@@ -215,33 +278,48 @@ const projects = [
     id: 'project-3',
     indexLabel: 'LLM, Prompt Injection, Direct PI, Indirect PI, Guardrails, Input validation',
     sidebarLabel: 'Prompt Injection Study',
-    title: 'Project Gamma: Federated Security Protocols',
+    title: 'From Exploitation to Defense - Unmasking Prompt Injection in Large Language Models',
     accentColor: 'text-blue-400',
     borderColor: 'border-blue-500/40',
     image: '/Images/research3.png',
+    lab: 'Cryptography lab, PDEU',
+    supervisor: 'Dr. Rutvij Jhaveri',
+    Publication: 'Published at Taylor & Francis',
     abstract:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.',
+      'This research analyzes prompt injection vulnerabilities in Large Language Models (LLMs), where malicious inputs manipulate model behavior by bypassing system safeguards. The study categorizes modern attack techniques such as direct injection, HouYi, G2PIA, and RAG poisoning, and evaluates their real-world impact. It further examines defense mechanisms including signed prompts, structured query enforcement (StruQ), input validation, and attention-based monitoring. The work provides a comprehensive security perspective and recommends defense-in-depth strategies for building safer and more reliable AI systems.',
     keyContributions: [
-      'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
-      'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-      'Federated protocol design for distributed security enforcement across heterogeneous nodes.',
+      'Analyzed Prompt Injection Vulnerabilities in LLMs by studying how malicious prompts manipulate model behavior and bypass safety instructions.',
+      'Systematically categorized modern attack techniques, including direct injection, HouYi, G2PIA, indirect injection, and RAG poisoning.',
+      'Evaluated defense mechanisms such as Signed Prompts, Structured Query Enforcement (StruQ), input validation, and attention monitoring for mitigating attacks.',
+      'Proposed a defense-in-depth framework that connects prompt injection attack analysis with practical mitigation strategies, enabling safer and more secure real-world LLM deployments.',
     ],
     detailedInfo: [
-      {
-        question: 'Extensive literature review on advanced persistence threats.',
+       {
+        question: 'Why study Prompt Injection?',
         answer:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. We surveyed over 200 papers spanning 2018–2024, cataloguing attack vectors, evasion techniques, and existing detection methodologies. Key themes included fileless malware, living-off-the-land binaries, and supply-chain compromise patterns.',
+          'Prompt injection is studied because it allows attackers to manipulate Large Language Models by bypassing safety instructions, potentially causing harmful or unintended outputs. It is recognized as a critical AI security risk and is ranked among the OWASP Top 10 risks for LLM applications, highlighting the need for robust defenses and secure deployment practices.',
       },
       {
-        question: 'Data collection and preprocessing of 10,000+ malware samples.',
+        question: 'What is Prompt Injection?',
         answer:
-          'Samples were sourced from VirusTotal and MalwareBazaar, covering 15 malware families. Preprocessing steps included static feature extraction (imports, entropy, section metadata), dynamic sandbox traces, and normalization pipelines to ensure consistent input dimensionality across all model architectures.',
+          'Prompt injection is an attack where malicious instructions are embedded inside user input to manipulate a Large Language Model (LLM) into ignoring safety rules or revealing restricted information.',
       },
       {
-        question: 'Architectural design of the detection framework.',
+        question: 'System Prompt vs User Prompt',
         answer:
-          'The framework adopts a multi-stage pipeline: (1) a feature extractor based on a fine-tuned ResNet backbone, (2) an attention module to highlight discriminative regions, and (3) a lightweight classifier head. The design prioritizes inference speed suitable for real-time endpoint deployment.',
+          'System Prompt: Hidden instructions defining how the AI should behave. User Prompt: Input provided by the user. Prompt injection attempts to override system prompts using crafted user inputs.',
       },
+      {
+        question: 'What is Prompt Hardening?',
+        answer:
+          'Prompt hardening strengthens system instructions by clearly separating trusted instructions from user input and limiting how prompts influence model behavior.',
+      },
+      {
+        question: 'What does Human-in-the-Loop mean?',
+        answer:
+          'Human-in-the-loop introduces human review or approval for sensitive tasks, ensuring critical decisions are not fully automated.',
+      },
+     
     ],
     additionalInfo: [
       'Technologies used: Python, PyTorch, Qiskit.',
@@ -902,6 +980,16 @@ function ResearchSection({
       )}
 
       {project.id === 'project-2' && <Project2Results />}
+
+      {project.id === 'project-3' && (
+        <div className="mt-8 border-l-2 border-blue-500/40 pl-5">
+          <h3 className="text-xs font-mono tracking-widest text-gray-500 uppercase mb-1">
+            Defense Architecture
+          </h3>
+          <p className="text-gray-600 text-[11px] font-mono mb-4">Click a stage to expand details</p>
+          <ArchitecturePipeline stages={project3Stages} />
+        </div>
+      )}
 
       {/* Results */}
       {'results' in project && project.results && (
