@@ -116,8 +116,6 @@ const projects = [
     lab: '5G usecase lab, IIT Gandhinagar',
     supervisor: 'Dr. Sameer G. Kulkarni',
     Publication: 'First version submitted at ACM ASIACCS-26',
-    abstract:
-      'I developed QSLP, a hybrid quantum–classical framework for image-based malware detection designed to improve robustness against evolving and adversarial threats. The model integrates a novel latent-space defense mechanism, QNI-CCP, with a quantum neural layer and adversarial training. By combining latent-space perturbation and pixel-level defense, QSLP enhances generalization and resilience under FGSM and PGD attacks. This work explores practical quantum advantage for secure AI systems in the NISQ era.',
     motivation: [
       'Classical CNN-based malware detectors are increasingly vulnerable to adversarial perturbations, leaving critical security systems exposed.',
       'Quantum computing offers a fundamentally richer hypothesis space that may yield more expressive and robust feature representations.',
@@ -219,8 +217,7 @@ const projects = [
     lab: 'AI-ML Lab, PDEU',
     supervisor: 'Dr. Rajeev Gupta',
     Publication: 'Accpeted at Procedia of Computer Science, Elsevier',
-    abstract:
-      'I developed a malicious prompt detection and sanitization framework to defend Large Language Models against prompt injection attacks. The system combines SBERT sentence embeddings with XGBoost (95% accuracy) and a probabilistic Markov Chain model (90.79% accuracy) for structural reasoning. To overcome limitations of SHAP-based token attribution, I proposed a novel Leave-One-Out deletion (LODO) approach that identifies causally malicious tokens. The framework enables intent-preserving prompt sanitization through impact-based token replacement rather than simple block-or-allow filtering.',
+    
     motivation: [
       'LLMs are increasingly deployed in production yet remain trivially exploitable via prompt injection, with no standard detection-and-repair pipeline in place.',
       'Existing defenses either block prompts entirely (too restrictive) or rely on heuristic keyword filtering (too fragile against paraphrased attacks).',
@@ -297,8 +294,7 @@ const projects = [
     lab: 'Cryptography lab, PDEU',
     supervisor: 'Dr. Rutvij Jhaveri',
     Publication: 'Published at Taylor & Francis',
-    abstract:
-      'This research analyzes prompt injection vulnerabilities in Large Language Models (LLMs), where malicious inputs manipulate model behavior by bypassing system safeguards. The study categorizes modern attack techniques such as direct injection, HouYi, G2PIA, and RAG poisoning, and evaluates their real-world impact. It further examines defense mechanisms including signed prompts, structured query enforcement (StruQ), input validation, and attention-based monitoring. The work provides a comprehensive security perspective and recommends defense-in-depth strategies for building safer and more reliable AI systems.',
+    
     motivation: [
       'Prompt injection is ranked among the OWASP Top 10 LLM risks yet lacks a unified taxonomic treatment linking attack categories to targeted defenses.',
       'High-profile incidents show that even well-aligned models can be coerced into harmful behavior through carefully crafted user inputs.',
@@ -930,16 +926,19 @@ function ResearchSection({
 
       {/* Fixed topic: Abstract */}
       <div className={`mt-8 border-l-2 ${project.borderColor} pl-5`}>
-        <h3 className="text-xs font-mono tracking-widest text-gray-500 uppercase mb-2">
-          Motivation
-        </h3>
+        <div className="flex items-center gap-3 mb-4">
+          <h3 className={`text-xs font-mono tracking-[0.25em] font-bold uppercase ${project.accentColor}`}>
+            Motivation
+          </h3>
+          <div className="flex-1 h-px bg-white/10" />
+        </div>
         <p className="text-gray-300 text-lg leading-relaxed">{project.abstract}</p>
         {project.motivation && project.motivation.length > 0 && (
-          <ul className="mt-4 flex flex-col gap-2">
+          <ul className="mt-4 flex flex-col gap-4 max-w-4xl">
             {project.motivation.map((point: string, i: number) => (
               <li key={i} className="flex items-start gap-3">
-                <span className="mt-2 w-1.5 h-1.5 rounded-full bg-cyan-400/60 shadow-[0_0_6px_rgba(34,211,238,0.5)] flex-shrink-0"></span>
-                <p className="text-gray-400 text-sm leading-relaxed">{point}</p>
+                <span className="mt-2 w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.8)] flex-shrink-0"></span>
+                <p className="text-gray-300 text-[1.05rem] leading-relaxed">{point}</p>
               </li>
             ))}
           </ul>
@@ -947,10 +946,13 @@ function ResearchSection({
       </div>
 
       {/* Fixed topic: Key Contributions */}
-      <div className={`mt-6 border-l-2 ${project.borderColor} pl-5`}>
-        <h3 className="text-xs font-mono tracking-widest text-gray-500 uppercase mb-2">
-          Key Contributions
-        </h3>
+      <div className={`mt-8 border-l-2 ${project.borderColor} pl-5`}>
+        <div className="flex items-center gap-3 mb-4">
+          <h3 className={`text-xs font-mono tracking-[0.25em] font-bold uppercase ${project.accentColor}`}>
+            Key Contributions
+          </h3>
+          <div className="flex-1 h-px bg-white/10" />
+        </div>
         <ul className="mt-2 flex flex-col gap-4 max-w-4xl">
           {(project.keyContributions as (string | { highlight: string; rest: string })[]).map((point, i) => (
             <li key={i} className="flex items-start gap-3">

@@ -13,61 +13,61 @@ const projects = [
     id: 'credcrawler',
     sidebarLabel: 'CredCrawler',
     title: '1. Project: CredCrawler',
-    supervisor: 'Dr. Jane Mitchell',
-    techStack: 'Python · Scrapy · Redis · PostgreSQL · Docker',
+    supervisor: 'Ms. Aashka Raval',
+    techStack: 'Python · Scrapy · Tor · Selenium  · BeautifulSoup4 · SMTP',
     accentColor: 'text-cyan-400',
     borderColor: 'border-cyan-500/40',
     glowColor: 'rgba(34,211,238,0.15)',
-    image: null as string | null,
+    image: '/Images/project1.png' as string | null,
     overview:
-      'CredCrawler is a modular, scalable web-crawling framework engineered to discover and audit publicly exposed credential endpoints across large organizational domains. It employs multi-threaded Scrapy spiders with Redis-based distributed queuing to process thousands of URLs concurrently. The system incorporates automated heuristic-based detection for sensitive data patterns — including API keys, JWT tokens, and OAuth secrets — and persists results in a structured PostgreSQL schema enabling downstream audit reporting and trend analysis.',
+      'a Python-based crawler that monitors Tor (.onion) sites to detect leaked credentials. It routes traffic through the Tor SOCKS5h proxy, then crawls pages (either via Selenium+Firefox for dynamic browsing or via requests for HTTP fetching) and spiders new links in a BFS-like manner. The crawler scans fetched HTML using regex to identify email:password-style patterns. When matches are found, it hashes the credentials with SHA-256 (avoids storing plaintext) and can send real-time alerts via Gmail SMTP.',
     demo: '#',
-    learnMore: '#',
+    learnMore: 'https://github.com/KATHAN-VYAS/CredScan',
   },
   {
     id: 'neuralvault',
-    sidebarLabel: 'NeuralVault',
-    title: '2. Project: NeuralVault',
-    supervisor: 'Dr. Arun Patel',
-    techStack: 'PyTorch · FastAPI · AES-256 · React · TypeScript',
+    sidebarLabel: 'SensoGuard',
+    title: '2. Project: SensoGuard',
+    supervisor: 'Dr. Davinder Paul Singh',
+    techStack: 'C++ · ESP8266 · Supabase · Next.js · MPU-6050 · HX711 · MAX30102',
     accentColor: 'text-purple-400',
     borderColor: 'border-purple-500/40',
     glowColor: 'rgba(168,85,247,0.15)',
-    image: null as string | null,
+    image: '/Images/project2.png' as string | null,
     overview:
-      'NeuralVault is an encrypted model storage and versioning system designed to protect proprietary machine learning artifacts throughout their lifecycle. It wraps PyTorch model checkpoints with AES-256-GCM encryption before persisting them to a content-addressable store. A FastAPI backend exposes a RESTful interface for model upload, retrieval, and provenance tracking, while a React dashboard provides visual diff tooling to compare checkpoint performance metrics across versions. Access control is enforced via scoped JWT tokens and role-based permissions.',
+      'SensoGuard is a wearable IoT health monitoring system that fuses multi-sensor data from motion (MPU-6050), load sensing (HX711), and pulse-oximetry (MAX30102) using an ESP8266-based edge device with non-blocking polling for continuous monitoring. The system streams physiological data to a cloud backend where event-driven Supabase Edge Functions perform real-time anomaly detection and automatically trigger alerts for critical conditions such as falls or abnormal vitals. A real-time Next.js dashboard provides remote monitoring and visualization for caregivers. The architecture and system design have been filed for a patent as a hybrid edge-cloud wearable health monitoring solution.',
     demo: '#',
-    learnMore: '#',
+    learnMore: 'https://docs.google.com/document/d/1V2e4RnXn9ieJBUHGZoDACiYffdwpBVnc/edit?usp=sharing&ouid=103978514576980005044&rtpof=true&sd=true',
   },
   {
     id: 'sentinelbot',
-    sidebarLabel: 'SentinelBot',
-    title: '3. Project: SentinelBot',
-    supervisor: 'Dr. Priya Sharma',
-    techStack: 'Node.js · Discord.js · Elasticsearch · Grafana · Terraform',
+    sidebarLabel: 'Automated Reconnaissance',
+    title: '3. Project: Automated Reconnaissance',
+    supervisor: 'Unsupervised',
+    techStack: 'Streamlit · Nmap · Selenium · DNSDumpster · stdlib',
     accentColor: 'text-blue-400',
     borderColor: 'border-blue-500/40',
     glowColor: 'rgba(96,165,250,0.15)',
-    image: null as string | null,
+    image: '/Images/project3.png' as string | null,
     overview:
-      'SentinelBot is an autonomous security monitoring agent deployed across multi-tenant cloud infrastructure. It ingests log streams from Elasticsearch, applies rule-based and ML-driven anomaly detection, and dispatches real-time alerts to Slack and Discord channels with contextual incident summaries. Terraform modules enable reproducible deployment across AWS and GCP environments. The Grafana integration surfaces live threat dashboards, MTTR trends, and compliance reporting for SOC analysts.',
+      'This is a automated Domain Reconnaissance Tool that streamlines critical information-gathering steps used in cybersecurity assessments. The system integrates DNS enumeration, subdomain discovery, traceroute analysis, port scanning, SSL inspection, and geolocation into a single workflow. Using APIs, Nmap scripts, and automated web scraping, it collects intelligence and generates a structured PDF reconnaissance report. This tool reduces manual reconnaissance effort while providing security analysts with rapid, actionable insights about a target domain.',
     demo: '#',
     learnMore: '#',
   },
   {
     id: 'dataforge',
-    sidebarLabel: 'DataForge',
-    title: '4. Project: DataForge',
-    supervisor: 'Dr. Vikram Mehta',
-    techStack: 'Apache Spark · Airflow · dbt · Snowflake · Kubernetes',
+    sidebarLabel: 'Forensight',
+    title: '4. Project: Forensight',
+    supervisor: 'Dr. Rutvij Jhaveri',
+    techStack: 'Python · Flask · JavaScript · Scikit-learn · TensorFlow · MongoDB ',
     accentColor: 'text-violet-400',
     borderColor: 'border-violet-500/40',
     glowColor: 'rgba(139,92,246,0.15)',
-    image: null as string | null,
+    image: '/Images/project4.png' as string | null,
     overview:
-      'DataForge is a cloud-native ELT pipeline orchestration framework built to handle petabyte-scale data ingestion workflows. It uses Apache Airflow for scheduling, Apache Spark for distributed transformation, and dbt for modular SQL-based data modeling against a Snowflake warehouse. Kubernetes manages worker autoscaling, ensuring cost efficiency during off-peak hours while maintaining sub-minute SLAs for critical pipelines. Schema evolution, lineage tracking, and data quality assertions are first-class citizens of the framework design.',
+      'ForenSight is a cyber triage platform designed to accelerate digital forensic investigations by automating evidence collection, analysis, and threat prioritization. The system integrates disk imaging, hashing, log analysis, and network activity inspection to rapidly surface indicators of compromise. AI/ML-based anomaly detection assigns risk scores to suspicious artifacts, helping investigators focus on high-impact threats first. It also generates structured, exportable forensic reports, enabling faster incident response and collaborative investigations.',
     demo: '#',
-    learnMore: '#',
+    learnMore: 'https://github.com/KATHAN-VYAS/ForenSight',
   },
 ];
 
@@ -122,7 +122,7 @@ function ProjectCard({
             alt={project.title}
             width={1920}
             height={1080}
-            className="w-full h-auto object-contain block"
+            className="w-full h-auto block"
           />
         </div>
       ) : (
