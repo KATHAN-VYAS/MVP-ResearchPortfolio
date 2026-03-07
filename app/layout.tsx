@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { ThreatProvider } from "./contexts/ThreatContext";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const inter = Inter({
   variable: "--font-geist-sans",
@@ -35,6 +37,8 @@ export default function RootLayout({
         <ThreatProvider>
           {children}
         </ThreatProvider>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
