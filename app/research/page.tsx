@@ -932,7 +932,6 @@ function ResearchSection({
           </h3>
           <div className="flex-1 h-px bg-white/10" />
         </div>
-        <p className="text-gray-300 text-lg leading-relaxed">{project.abstract}</p>
         {project.motivation && project.motivation.length > 0 && (
           <ul className="mt-4 flex flex-col gap-4 max-w-4xl">
             {project.motivation.map((point: string, i: number) => (
