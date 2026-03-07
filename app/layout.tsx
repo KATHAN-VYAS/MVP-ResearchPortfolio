@@ -14,8 +14,12 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "The Identity Codex | Neural Research & Code",
+  title: "Kathan Vyas",
   description: "A cyberpunk-inspired portfolio exploring the intersection of AI research, code, and creative engineering.",
+  icons: {
+    icon: "/Images/fevicon.png",
+    apple: "/Images/image.png",
+  },
 };
 
 export default function RootLayout({

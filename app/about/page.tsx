@@ -443,7 +443,7 @@ export default function AboutPage() {
             viewport={{ once: true }}
             className="text-4xl md:text-5xl font-bold mb-12 text-center bg-gradient-to-r from-yellow-400 via-red-400 to-yellow-400 bg-clip-text text-transparent"
           >
-            A Motivated Child
+            My Motivation
           </motion.h2>
 
           <div className="grid md:grid-cols-2 gap-8 items-start">

@@ -118,6 +118,12 @@ const projects = [
     Publication: 'First version submitted at ACM ASIACCS-26',
     abstract:
       'I developed QSLP, a hybrid quantum–classical framework for image-based malware detection designed to improve robustness against evolving and adversarial threats. The model integrates a novel latent-space defense mechanism, QNI-CCP, with a quantum neural layer and adversarial training. By combining latent-space perturbation and pixel-level defense, QSLP enhances generalization and resilience under FGSM and PGD attacks. This work explores practical quantum advantage for secure AI systems in the NISQ era.',
+    motivation: [
+      'Classical CNN-based malware detectors are increasingly vulnerable to adversarial perturbations, leaving critical security systems exposed.',
+      'Quantum computing offers a fundamentally richer hypothesis space that may yield more expressive and robust feature representations.',
+      'No prior work had explicitly benchmarked hybrid quantum–classical models under both FGSM and PGD adversarial settings on real malware image datasets.',
+      'The NISQ era demands practical, hardware-aware architectures — motivating the design of compact yet resilient hybrid pipelines.',
+    ],
     keyContributions: [
       { highlight: 'Designed QSLP', rest: '- a unified hybrid quantum–classical architecture for robust image-based malware detection.' },
       { highlight: 'Proposed QNI-CCP', rest: '- a novel class-aware latent-space perturbation defense before quantum processing.' },
@@ -215,6 +221,12 @@ const projects = [
     Publication: 'Accpeted at Procedia of Computer Science, Elsevier',
     abstract:
       'I developed a malicious prompt detection and sanitization framework to defend Large Language Models against prompt injection attacks. The system combines SBERT sentence embeddings with XGBoost (95% accuracy) and a probabilistic Markov Chain model (90.79% accuracy) for structural reasoning. To overcome limitations of SHAP-based token attribution, I proposed a novel Leave-One-Out deletion (LODO) approach that identifies causally malicious tokens. The framework enables intent-preserving prompt sanitization through impact-based token replacement rather than simple block-or-allow filtering.',
+    motivation: [
+      'LLMs are increasingly deployed in production yet remain trivially exploitable via prompt injection, with no standard detection-and-repair pipeline in place.',
+      'Existing defenses either block prompts entirely (too restrictive) or rely on heuristic keyword filtering (too fragile against paraphrased attacks).',
+      'SHAP-based attribution fails on compound adversarial phrases, leaving a critical interpretability gap for token-level sanitization.',
+      'A causal, intent-preserving rewriting approach can neutralize attacks while keeping the user experience intact — a gap this work directly addresses.',
+    ],
     keyContributions: [
       'Bridged the Gap Between Detection and Sanitization: Moved beyond traditional “block-or-allow” classification',
       'A Hybrid Detection Pipeline: Achieved ~95% accuracy using embedding-based classification and 90.79% accuracy with an interpretable Markov Chain model capturing structural prompt patterns.',
@@ -287,6 +299,12 @@ const projects = [
     Publication: 'Published at Taylor & Francis',
     abstract:
       'This research analyzes prompt injection vulnerabilities in Large Language Models (LLMs), where malicious inputs manipulate model behavior by bypassing system safeguards. The study categorizes modern attack techniques such as direct injection, HouYi, G2PIA, and RAG poisoning, and evaluates their real-world impact. It further examines defense mechanisms including signed prompts, structured query enforcement (StruQ), input validation, and attention-based monitoring. The work provides a comprehensive security perspective and recommends defense-in-depth strategies for building safer and more reliable AI systems.',
+    motivation: [
+      'Prompt injection is ranked among the OWASP Top 10 LLM risks yet lacks a unified taxonomic treatment linking attack categories to targeted defenses.',
+      'High-profile incidents show that even well-aligned models can be coerced into harmful behavior through carefully crafted user inputs.',
+      'Emerging attack variants such as HouYi, G2PIA, and RAG poisoning are insufficiently documented, leaving practitioners unaware of the threat surface.',
+      'A defense-in-depth framework is needed that connects theoretical attack analysis with actionable, deployment-ready mitigation strategies.',
+    ],
     keyContributions: [
       'Analyzed Prompt Injection Vulnerabilities in LLMs by studying how malicious prompts manipulate model behavior and bypass safety instructions.',
       'Systematically categorized modern attack techniques, including direct injection, HouYi, G2PIA, indirect injection, and RAG poisoning.',
@@ -621,7 +639,7 @@ function ResultsSection({ results }: { results: ResultsData }) {
                 }
                 alt="Classical CNN t-SNE"
                 fill
-                className="object-contain p-1"
+                className="object-cover"
               />
             </div>
           </div>
@@ -640,7 +658,7 @@ function ResultsSection({ results }: { results: ResultsData }) {
                 }
                 alt="Hybrid QNN t-SNE"
                 fill
-                className="object-contain p-1"
+                className="object-cover"
               />
             </div>
           </div>
@@ -894,27 +912,38 @@ function ResearchSection({
       )}
 
       {/* Image */}
-      <div className="w-full aspect-[21/9] relative bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
-        {project.image ? (
+      {project.image ? (
+        <div className="w-full rounded-2xl overflow-hidden border border-white/10">
           <Image
             src={project.image}
             alt={project.title}
-            fill
-            className="object-contain"
+            width={1920}
+            height={1080}
+            className="w-full h-auto block"
           />
-        ) : (
-          <div className="absolute inset-0 flex items-center justify-center text-gray-500 text-sm font-mono">
-            [ Image Placeholder ]
-          </div>
-        )}
-      </div>
+        </div>
+      ) : (
+        <div className="w-full aspect-[21/9] flex items-center justify-center bg-white/5 border border-white/10 rounded-2xl text-gray-500 text-sm font-mono">
+          [ Image Placeholder ]
+        </div>
+      )}
 
       {/* Fixed topic: Abstract */}
       <div className={`mt-8 border-l-2 ${project.borderColor} pl-5`}>
         <h3 className="text-xs font-mono tracking-widest text-gray-500 uppercase mb-2">
-          Overview
+          Motivation
         </h3>
         <p className="text-gray-300 text-lg leading-relaxed">{project.abstract}</p>
+        {project.motivation && project.motivation.length > 0 && (
+          <ul className="mt-4 flex flex-col gap-2">
+            {project.motivation.map((point: string, i: number) => (
+              <li key={i} className="flex items-start gap-3">
+                <span className="mt-2 w-1.5 h-1.5 rounded-full bg-cyan-400/60 shadow-[0_0_6px_rgba(34,211,238,0.5)] flex-shrink-0"></span>
+                <p className="text-gray-400 text-sm leading-relaxed">{point}</p>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       {/* Fixed topic: Key Contributions */}
@@ -1003,7 +1032,7 @@ function ResearchSection({
       {'resources' in project && project.resources && (
         <div className="mt-16 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
           <div>
-            <p className="text-gray-400 text-sm">For more detailes access my publicaitons here</p>
+            <p className="text-gray-400 text-sm">For more detailes access full paper here</p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
             {project.resources.publicationUrl && (
@@ -1037,12 +1066,15 @@ function ResearchSection({
 
 export default function ResearchPage() {
   const [isLoading, setIsLoading] = useState(true);
+  const [showReveal, setShowReveal] = useState(false);
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     const timer = setTimeout(() => {
       setIsLoading(false);
       document.body.style.overflow = '';
+      // Small extra delay so the heading fade-in completes before the span wipes in
+      setTimeout(() => setShowReveal(true), 400);
     }, 3000);
     return () => {
       clearTimeout(timer);
@@ -1097,11 +1129,14 @@ export default function ResearchPage() {
           transition={{ duration: 0.6 }}
           className="mb-16"
         >
-          <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent mb-16">
-            Research
+          <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent mb-16 pb-2">
+            Research{' '}
+            <span className={`reveal-text${showReveal ? ' visible' : ''}`}>
+              that actually matters.
+            </span>
           </h1>
           <p className="text-gray-400 mt-3 text-lg max-w-2xl">
-          
+
           </p>
         </motion.div>
 

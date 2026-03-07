@@ -100,6 +100,25 @@ body {
   animation: gradient-shift 8s ease infinite;
 }
 
+/* Left-to-right text reveal */
+@keyframes reveal-ltr {
+  from { clip-path: inset(0 100% 0 0); }
+  to   { clip-path: inset(0 0%   0 0); }
+}
+
+.reveal-text {
+  display: inline-block;
+  font-size: 0.5em;
+  font-weight: 300;
+  color: #888;
+  clip-path: inset(0 100% 0 0);
+  vertical-align: middle;
+}
+
+.reveal-text.visible {
+  animation: reveal-ltr 1.5s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
+}
+
 /* Screen shake animation for threat mode */
 @keyframes shake {
   0%, 100% { transform: translate(0, 0); }
