@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { ExternalLink, Monitor, User, Layers } from 'lucide-react';
 import Navbar from '../components/Navbar';
+import { FallbackToast } from '../components/FallbackToast';
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
@@ -76,9 +77,11 @@ const projects = [
 function ProjectCard({
   project,
   index,
+  onPlaceholder,
 }: {
   project: (typeof projects)[number];
   index: number;
+  onPlaceholder: () => void;
 }) {
   return (
     <motion.section
@@ -137,6 +140,9 @@ function ProjectCard({
       <div className="flex items-center justify-between mt-6 pt-5 border-t border-white/10">
         <a
           href={project.demo}
+          onClick={project.demo === '#' ? (e) => { e.preventDefault(); onPlaceholder(); } : undefined}
+          target={project.demo !== '#' ? '_blank' : undefined}
+          rel={project.demo !== '#' ? 'noopener noreferrer' : undefined}
           className={`inline-flex items-center gap-2 text-sm font-mono font-semibold ${project.accentColor} hover:opacity-70 transition-opacity duration-200`}
         >
           <Monitor size={15} />
@@ -144,6 +150,9 @@ function ProjectCard({
         </a>
         <a
           href={project.learnMore}
+          onClick={project.learnMore === '#' ? (e) => { e.preventDefault(); onPlaceholder(); } : undefined}
+          target={project.learnMore !== '#' ? '_blank' : undefined}
+          rel={project.learnMore !== '#' ? 'noopener noreferrer' : undefined}
           className="inline-flex items-center gap-2 text-sm font-mono text-gray-500 hover:text-white transition-colors duration-200"
         >
           Learn more&hellip;
@@ -159,6 +168,12 @@ function ProjectCard({
 export default function ProjectsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [showReveal, setShowReveal] = useState(false);
+  const [toast, setToast] = useState(false);
+
+  function showToast() {
+    setToast(true);
+    setTimeout(() => setToast(false), 2500);
+  }
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -266,13 +281,14 @@ export default function ProjectsPage() {
           {/* ── Right Content ── */}
           <div className="flex flex-col gap-24">
             {projects.map((project, i) => (
-              <ProjectCard key={project.id} project={project} index={i} />
+              <ProjectCard key={project.id} project={project} index={i} onPlaceholder={showToast} />
             ))}
           </div>
 
         </div>
       </div>
     </main>
+    <FallbackToast visible={toast} />
     </>
   );
 }

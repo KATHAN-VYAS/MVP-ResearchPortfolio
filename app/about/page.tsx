@@ -7,6 +7,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useThreatMode } from '../contexts/ThreatContext';
 import Navbar from '../components/Navbar';
+import { FallbackToast } from '../components/FallbackToast';
 
 // Scramble-to-real decryption animation
 function DecryptText({ text, trigger }: { text: string; trigger: boolean }) {
@@ -87,6 +88,12 @@ export default function AboutPage() {
   const [ultronUnlocked, setUltronUnlocked] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+  const [toast, setToast] = useState(false);
+
+  function showToast() {
+    setToast(true);
+    setTimeout(() => setToast(false), 2500);
+  }
 
   // Preloader effect
   useEffect(() => {
@@ -566,7 +573,7 @@ export default function AboutPage() {
                       >
                         <Link
                           href={href}
-                          onClick={(e) => e.stopPropagation()}
+                          onClick={(e) => { e.stopPropagation(); e.preventDefault(); showToast(); }}
                           className="group flex items-start gap-2 rounded-lg px-3 py-2 text-sm text-cyan-300 font-mono transition-all duration-200 hover:text-white hover:bg-cyan-500/20 hover:translate-x-1"
                         >
                           <Shield className="w-3.5 h-3.5 mt-0.5 shrink-0 text-cyan-400 group-hover:text-white" />
@@ -819,6 +826,7 @@ export default function AboutPage() {
                           >
                             <a
                               href="#"
+                              onClick={(e) => { e.preventDefault(); showToast(); }}
                               className="text-xs text-cyan-400 hover:text-cyan-300 underline decoration-cyan-400/50 hover:decoration-cyan-300 transition-colors"
                             >
                               Learn more →
@@ -1099,6 +1107,7 @@ export default function AboutPage() {
         </motion.div>
       </motion.button>
     </motion.div>
+    <FallbackToast visible={toast} />
     </>
   );
 }
