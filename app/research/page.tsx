@@ -115,7 +115,7 @@ const projects = [
     image: '/Images/img1 QML.png',
     lab: '5G usecase lab, IIT Gandhinagar',
     supervisor: 'Dr. Sameer G. Kulkarni',
-    Publication: 'First version submitted at ACM ASIACCS-26',
+    Publication: 'First version accepted at ACM ASIACCS-26',
     motivation: [
       'Classical CNN-based malware detectors are increasingly vulnerable to adversarial perturbations, leaving critical security systems exposed.',
       'Quantum computing offers a fundamentally richer hypothesis space that may yield more expressive and robust feature representations.',
