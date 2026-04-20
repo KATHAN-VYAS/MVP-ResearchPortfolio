@@ -4,10 +4,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { Linkedin, Github, Instagram, Mail, Shield, Zap, Building2, GraduationCap, Microscope, Activity, AlertTriangle } from 'lucide-react';
 import Image from 'next/image';
-import Link from 'next/link';
 import { useThreatMode } from '../contexts/ThreatContext';
 import Navbar from '../components/Navbar';
-import { FallbackToast } from '../components/FallbackToast';
 
 // Scramble-to-real decryption animation
 function DecryptText({ text, trigger }: { text: string; trigger: boolean }) {
@@ -88,12 +86,6 @@ export default function AboutPage() {
   const [ultronUnlocked, setUltronUnlocked] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
-  const [toast, setToast] = useState(false);
-
-  function showToast() {
-    setToast(true);
-    setTimeout(() => setToast(false), 2500);
-  }
 
   // Preloader effect
   useEffect(() => {
@@ -112,46 +104,20 @@ export default function AboutPage() {
   }, []);
 
   const experiences = [
+    
     {
-      title: 'Forensic Knight',
-      role: 'Digital Forensics Intern',
-      subtitle: 'The Awakening',
-      date: '2023',
-      status: 'COMPLETED',
-      icon: Building2,
-      description: 'Began my journey into cybersecurity, analyzing digital evidence and understanding attack vectors.',
+      title: ' Research Intern at IIT Gandhinagar',
+      role: 'Full-time Research Intern',
+      subtitle: 'The Deployment',
+      date: '2025-Present',
+      status: 'CURRENT',
+      icon: Activity,
+      href: 'http://localhost:3001/research#project-1',
+      description: 'Currently engineering production-ready AI security solutions bridging theory with practice.',
       details: [
-        'Executed forensic investigations using Kali Linux artifact analysis.',
-        'Analyzed malware behavior and file obfuscation techniques',
-        'Learned MITRE ATT&CK and NIST frameworks for structured threat classification',
-      ],
-   },
-    {
-      title: 'LLM Researcher at PDEU',
-      role: 'Research on LLM Security',
-      subtitle: 'The Training',
-      date: '2024',
-      status: 'COMPLETED',
-      icon: Microscope,
-      description: 'Dove deep into Large Language Model vulnerabilities, exploring prompt injection attacks and defensive strategies.',
-      details: [
-        'Researched prompt injection vulnerabilities in LLMs',
-        'Analyzed advanced defense strategies.',
-        'Learned scientific writing and gap identification, translating findings into actionable security insights.',
-      ],
-    },
-    {
-      title: 'Research Intern at IIT Gandhinagar',
-      role: 'Research Intern',
-      subtitle: 'The Proving Ground',
-      date: 'Summer 2024',
-      status: 'COMPLETED',
-      icon: GraduationCap,
-      description: 'Advanced research internship focusing on AI safety protocols and quantum-resistant cryptography.',
-      details: [
-        'Developed the "QNI-CCP" hybrid Classical-Quantum framework for robust malware detection.',
-        'Achieved 97% accuracy on a large-scale dataset.',
-        'Evaluated models under adversarial conditions.',
+        'Proposed the novel QSLP framework for advanced malware classification.',
+        'Validated QSLP performance and robustness across different datasets.',
+        'Authored first version of the worked and accepted at ACM ASIACCS-26',
       ],
     },
     {
@@ -161,6 +127,7 @@ export default function AboutPage() {
       date: '2024-2025',
       status: 'COMPLETED',
       icon: GraduationCap,
+      href: 'http://localhost:3001/research#project-2',
       description: 'Expanded research scope to include broader AI alignment challenges and ML security frameworks.',
       details: [
         'Developed "LODO" framework to sanitize malicious prompts.',
@@ -169,19 +136,50 @@ export default function AboutPage() {
       ],
     },
     {
-      title: ' Research Intern at IIT Gandhinagar (Current)',
-      role: 'Advanced Research Intern',
-      subtitle: 'The Deployment',
-      date: '2025-Present',
-      status: 'ACTIVE',
-      icon: Activity,
-      description: 'Currently engineering production-ready AI security solutions bridging theory with practice.',
+      title: 'Research Intern at IIT Gandhinagar',
+      role: 'Research Intern',
+      subtitle: 'The Proving Ground',
+      date: 'Summer 2024',
+      status: 'COMPLETED',
+      icon: GraduationCap,
+      href: '',
+      description: 'Advanced research internship focusing on AI safety protocols and quantum-resistant cryptography.',
       details: [
-        'Proposed the novel QSLP framework for advanced malware classification.',
-        'Validated framework performance and robustness on the Malevis dataset.',
-        'Authored and submitted findings to a top ACM conference.',
+        'Developed the "QNI-CCP" hybrid Classical-Quantum framework for robust malware detection.',
+        'Achieved 97% accuracy on a large-scale dataset.',
+        'Evaluated models under adversarial conditions.',
       ],
     },
+    {
+      title: 'LLM Researcher at PDEU',
+      role: 'Research on LLM Security',
+      subtitle: 'The Training',
+      date: '2024',
+      status: 'COMPLETED',
+      icon: Microscope,
+      href: 'http://localhost:3001/research#project-3',
+      description: 'Dove deep into Large Language Model vulnerabilities, exploring prompt injection attacks and defensive strategies.',
+      details: [
+        'Researched prompt injection vulnerabilities in LLMs',
+        'Analyzed advanced defense strategies.',
+        'Learned scientific writing and gap identification, translating findings into actionable security insights.',
+      ],
+    },
+    {
+      title: 'Forensic Knight',
+      role: 'Digital Forensics Intern',
+      subtitle: 'The Awakening',
+      date: '2023',
+      status: 'COMPLETED',
+      icon: Building2,
+      href: '',
+      description: 'Began my journey into cybersecurity, analyzing digital evidence and understanding attack vectors.',
+      details: [
+        'Executed forensic investigations using Kali Linux artifact analysis.',
+        'Analyzed malware behavior and file obfuscation techniques',
+        'Learned MITRE ATT&CK and NIST frameworks for structured threat classification',
+      ],
+   },
   ];
 
   return (
@@ -284,7 +282,7 @@ export default function AboutPage() {
                 <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mt-6">
                   Kathan Vyas
                 </h2>
-                <p className="text-gray-400 text-lg mt-2">AI and Cybersecurity Researcher</p>
+                <p className="text-gray-400 text-lg mt-2">AI Security Researcher</p>
               </div>
 
               {/* Right Column: Core Directives */}
@@ -561,26 +559,21 @@ export default function AboutPage() {
                     className="mt-1 flex flex-col gap-2"
                   >
                     {[
-                      { href: '#', label: 'Researched Prompt Injection (Understanding Ultron)' },
-                      { href: '#', label: 'Developed Malicious Prompt Classification & Sanitization Framework (Killing the Ultron)' },
-                      { href: '#', label: 'Developed QNI-CCP Training (Strengthening Jarvis for future adversaries)' },
-                    ].map(({ href, label }, idx) => (
+                      { label: 'Researched Prompt Injection (Understanding Ultron)' },
+                      { label: 'Developed Malicious Prompt Classification & Sanitization Framework (Killing the Ultron)' },
+                      { label: 'Developed QNI-CCP Training (Strengthening Jarvis for future adversaries)' },
+                    ].map(({ label }, idx) => (
                       <motion.li
                         key={idx}
                         initial={{ opacity: 0, x: -8 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: idx * 0.08, duration: 0.35 }}
+                        className="flex items-start gap-2 rounded-lg px-3 py-2 text-sm text-cyan-300 font-mono"
                       >
-                        <Link
-                          href={href}
-                          onClick={(e) => { e.stopPropagation(); e.preventDefault(); showToast(); }}
-                          className="group flex items-start gap-2 rounded-lg px-3 py-2 text-sm text-cyan-300 font-mono transition-all duration-200 hover:text-white hover:bg-cyan-500/20 hover:translate-x-1"
-                        >
-                          <Shield className="w-3.5 h-3.5 mt-0.5 shrink-0 text-cyan-400 group-hover:text-white" />
-                          <span>
-                            <DecryptText text={label} trigger={jarvisUnlocked} />
-                          </span>
-                        </Link>
+                        <Shield className="w-3.5 h-3.5 mt-0.5 shrink-0 text-cyan-400" />
+                        <span>
+                          <DecryptText text={label} trigger={jarvisUnlocked} />
+                        </span>
                       </motion.li>
                     ))}
                   </motion.ul>
@@ -818,20 +811,21 @@ export default function AboutPage() {
                           </ul>
                           
                           {/* More Link */}
-                          <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={isHovered ? { opacity: 1 } : {}}
-                            transition={{ delay: 0.3 }}
-                            className="mt-4 pt-3 border-t border-cyan-400/30"
-                          >
-                            <a
-                              href="#"
-                              onClick={(e) => { e.preventDefault(); showToast(); }}
-                              className="text-xs text-cyan-400 hover:text-cyan-300 underline decoration-cyan-400/50 hover:decoration-cyan-300 transition-colors"
+                          {exp.href && (
+                            <motion.div
+                              initial={{ opacity: 0 }}
+                              animate={isHovered ? { opacity: 1 } : {}}
+                              transition={{ delay: 0.3 }}
+                              className="mt-4 pt-3 border-t border-cyan-400/30"
                             >
-                              Learn more →
-                            </a>
-                          </motion.div>
+                              <a
+                                href={exp.href}
+                                className="text-xs text-cyan-400 hover:text-cyan-300 underline decoration-cyan-400/50 hover:decoration-cyan-300 transition-colors"
+                              >
+                                Learn more →
+                              </a>
+                            </motion.div>
+                          )}
                         </motion.div>
 
                         {/* Corner Accent Lines */}
@@ -884,7 +878,14 @@ export default function AboutPage() {
 
           {/* Achievement Badges Grid */}
           <div className="grid md:grid-cols-3 gap-6">
-            {[
+            {[{
+                icon: '📜',
+                title: 'The Researcher',
+                description: '4 Publications',
+                score: 'ACM, Elsevier, Taylor & Francis, IEEE',
+                color: 'from-blue-500 to-purple-500',
+                delay: 0.3,
+              },
               {
                 icon: '🏆',
                 title: 'The Quant Master',
@@ -901,14 +902,7 @@ export default function AboutPage() {
                 color: 'from-gray-400 to-gray-300',
                 delay: 0.2,
               },
-              {
-                icon: '📜',
-                title: 'The Researcher',
-                description: '3 Publications',
-                score: 'Elsevier/Taylor & Francis/IEE',
-                color: 'from-blue-500 to-purple-500',
-                delay: 0.3,
-              },
+              
             ].map((achievement, index) => (
               <motion.div
                 key={index}
@@ -981,7 +975,8 @@ export default function AboutPage() {
                     viewport={{ once: true }}
                     className="text-sm text-gray-400"
                   >
-                    Final Year B.Tech, PDEU | Research Intern, IIT Gandhinagar
+                    <span className="block">Incoming M.Eng Cybersecurity, University of Maryland (Fall 2026)</span>
+                    <span className="block">Research Intern, IIT Gandhinagar</span>
                   </motion.p>
                 </div>
 
@@ -1020,7 +1015,7 @@ export default function AboutPage() {
                   transition={{ duration: 0.5 }}
                   viewport={{ once: true }}
                 >
-                  <h4 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-purple-400 via-cyan-400 to-purple-400 bg-clip-text text-transparent mb-3">
+                  <h4 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-emerald-300 via-lime-300 to-cyan-300 bg-clip-text text-transparent mb-3">
                     Open to Research Positions in Leading Firms & Laboratories
                   </h4>
                   <p className="text-gray-300 text-sm md:text-base mb-4">
@@ -1107,7 +1102,6 @@ export default function AboutPage() {
         </motion.div>
       </motion.button>
     </motion.div>
-    <FallbackToast visible={toast} />
     </>
   );
 }

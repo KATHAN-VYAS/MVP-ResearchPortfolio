@@ -158,14 +158,15 @@ export default function ConnectPage() {
             transition={{ duration: 0.6 }}
             className="mb-16"
           >
-            <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent pb-2">
+            <h1 className="text-5xl md:text-7xl leading-[1.12] font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent pb-2">
               Connect{' '}
               <span className={`reveal-text${showReveal ? ' visible' : ''}`}>
-                with me.
+                and save the world together!
               </span>
             </h1>
             <p className="text-gray-400 text-lg mt-4 max-w-xl">
-              Final Year B.Tech @ PDEU &nbsp;·&nbsp; Research Intern @ IIT Gandhinagar
+              <span className="block">Incoming M.Eng Cybersecurity @ University of Maryland (Fall 2026)</span>
+              <span className="block">Research Intern @ IIT Gandhinagar</span>
             </p>
             <div className="flex items-center gap-2 mt-3">
               <span className="w-2 h-2 rounded-full bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.8)] animate-pulse" />

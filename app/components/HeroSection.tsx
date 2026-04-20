@@ -370,7 +370,7 @@ function ChatInterface() {
       </div>
 
       {/* Chat messages */}
-      <div className="flex-1 space-y-2 overflow-y-auto">
+      <div className="flex-1 space-y-1 overflow-hidden">
         {messages.filter(msg => msg && msg.type).map((msg, i) => (
           <motion.div
             key={i}
@@ -383,7 +383,7 @@ function ChatInterface() {
                 : msg.type === 'user'
                 ? 'text-blue-300 text-right'
                 : 'text-purple-300'
-            }`}
+            } leading-tight truncate`}
           >
             {msg.type === 'jarvis' && '> '}
             {msg.text}

@@ -1032,9 +1032,6 @@ function ResearchSection({
       {/* Resources Footer */}
       {'resources' in project && project.resources && (
         <div className="mt-16 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-          <div>
-            <p className="text-gray-400 text-sm">For more detailes access full paper here</p>
-          </div>
           <div className="flex flex-wrap items-center gap-3">
             {project.resources.publicationUrl && (
               <a href={project.resources.publicationUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-purple-500/10 text-purple-300 border border-purple-500/30 px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-purple-500/20 hover:shadow-[0_0_20px_rgba(168,85,247,0.2)] transition-all duration-300">
@@ -1156,7 +1153,7 @@ export default function ResearchPage() {
             {/* Relative anchor pinned to right edge — card grows leftward */}
             <div className="relative w-[180px] xl:w-[200px]">
               <div className="group absolute right-0 top-0 flex flex-col items-start bg-[#0a0f1c]/95 backdrop-blur-md border border-white/10 hover:border-cyan-500/30 rounded-2xl p-5 transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] overflow-hidden w-[180px] hover:w-[360px] shadow-lg hover:shadow-[0_0_30px_rgba(34,211,238,0.1)]">
-                <p className="text-xs tracking-[0.2em] text-gray-500 font-mono mb-4 whitespace-nowrap transition-colors group-hover:text-cyan-400">
+                <p className="text-xs tracking-[0.2em] text-cyan-300 font-mono font-semibold mb-4 whitespace-nowrap transition-colors group-hover:text-cyan-200">
                   INDEX
                 </p>
                 <nav className="flex flex-col gap-4 w-full">
